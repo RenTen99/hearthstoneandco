@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hearthstone & Co. Workforce Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:#6F8F82; --sage-dark:#4A6B5E; --sage-deep:#2F4F44;
+  --sage-light:#B8D4CA; --sage-pale:#E4EFEb; --sage-wash:#F2F7F5;
+  --mauve:#BFA6C9; --mauve-dark:#9B7EAB; --mauve-deep:#6E4A5E;
+  --mauve-light:#DDD0E6; --mauve-pale:#F3EEF7;
+  --ivory:#FAF8F4; --ivory-warm:#F2EDE3; --ink:#1E1E1E;
+  --ink-soft:#3D3D3D; --stone:#7A7068; --stone-light:#B0A898;
+  --rule:#DDD9D0; --white:#FFFFFF;
+  --fd:'Lora',Georgia,serif; --fb:'DM Sans',system-ui,sans-serif;
+  --nav-h:80px; --max-w:1200px; --ease:cubic-bezier(.25,.46,.45,.94);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{font-family:var(--fb);color:var(--ink-soft);background:var(--ivory);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer;border:none;background:none} ul{list-style:none}
+
+/* PAGES */
+.page{display:none;animation:fadeUp .5s var(--ease) both}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(250,248,244,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 48px;transition:box-shadow .3s}
+.nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.nav-logo{display:flex;align-items:center;gap:14px;cursor:pointer}
+.nav-logo-name{font-weight:700;font-size:15px;color:var(--ink);letter-spacing:-.2px;line-height:1}
+.nav-logo-name span{color:var(--mauve-dark)}
+.nav-logo-sub{font-size:9px;font-weight:500;letter-spacing:3px;color:var(--stone);text-transform:uppercase;line-height:1;margin-top:2px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-item{position:relative}
+.nav-link{font-size:13.5px;font-weight:500;color:var(--stone);letter-spacing:.3px;cursor:pointer;position:relative;transition:color .2s;white-space:nowrap;user-select:none}
+.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--sage);transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease)}
+.nav-link:hover,.nav-link.active{color:var(--sage-dark)}
+.nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+.nav-caret{font-size:9px;margin-left:3px;opacity:.5;display:inline-block;transition:transform .2s}
+.nav-item:hover .nav-caret{transform:rotate(180deg);opacity:1}
+.nav-dropdown{position:absolute;top:calc(100% + 20px);left:50%;transform:translateX(-50%) translateY(-6px);background:var(--white);border:1px solid var(--rule);border-radius:8px;box-shadow:0 16px 48px rgba(0,0,0,.12);min-width:210px;padding:6px 0;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s var(--ease);z-index:200}
+.nav-item:hover .nav-dropdown{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
+.nav-dropdown::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:12px;height:6px;background:var(--white);clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+.dd-section{border-bottom:1px solid var(--rule);padding:4px 0}
+.dd-section:last-child{border-bottom:none}
+.dd-label{font-size:9.5px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--stone-light);padding:6px 16px 4px}
+.dd-item{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:13px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+.dd-item:hover{background:var(--sage-wash);color:var(--sage-dark)}
+.dd-dot{width:5px;height:5px;border-radius:50%;background:var(--sage-light);flex-shrink:0;transition:background .15s}
+.dd-item:hover .dd-dot{background:var(--sage)}
+.btn-nav{background:var(--sage);color:var(--white);padding:10px 22px;font-size:13px;font-weight:600;letter-spacing:.5px;border-radius:4px;transition:background .2s,transform .15s}
+.btn-nav:hover{background:var(--sage-dark);transform:translateY(-1px)}
+.mob-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.mob-btn span{display:block;width:22px;height:1.5px;background:var(--ink-soft);transition:all .3s}
+.mob-nav{position:fixed;inset:0;background:var(--ivory);z-index:999;transform:translateX(100%);transition:transform .4s var(--ease-out);padding:96px 32px 48px;display:flex;flex-direction:column;gap:8px}
+.mob-nav.open{transform:translateX(0)}
+.mob-link{font-family:var(--fd);font-size:24px;font-weight:500;color:var(--ink);padding:12px 0;border-bottom:1px solid var(--rule);cursor:pointer;display:block}
+
+/* LAYOUT */
+.container{max-width:var(--max-w);margin:0 auto;padding:0 48px}
+.page-content{padding-top:var(--nav-h)}
+.section{padding:96px 0}
+.section-sm{padding:64px 0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--sage);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--sage)}
+.eyebrow-center{justify-content:center}
+.eyebrow-center::before{display:none}
+h1.xl{font-family:var(--fd);font-size:clamp(40px,5vw,68px);font-weight:500;line-height:1.1;color:var(--ink);letter-spacing:-1px}
+h2.lg{font-family:var(--fd);font-size:clamp(30px,3.5vw,48px);font-weight:500;line-height:1.15;color:var(--ink);letter-spacing:-.5px}
+h2.md{font-family:var(--fd);font-size:clamp(22px,2.5vw,34px);font-weight:500;line-height:1.25;color:var(--ink)}
+h3.sm{font-size:17px;font-weight:700;color:var(--ink);line-height:1.3}
+p.lg{font-size:17px;line-height:1.75;color:var(--stone)}
+p.md{font-size:15px;line-height:1.7;color:var(--stone)}
+p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
+.sage-c{color:var(--sage)} .mauve-c{color:var(--mauve-dark)} .it{font-style:italic}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;font-size:13.5px;font-weight:600;letter-spacing:.4px;border-radius:4px;transition:all .2s var(--ease);cursor:pointer;font-family:var(--fb)}
+.btn-p{background:var(--sage);color:var(--white);border:1.5px solid var(--sage)}
+.btn-p:hover{background:var(--sage-dark);border-color:var(--sage-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(111,143,130,.3)}
+.btn-o{background:transparent;color:var(--sage);border:1.5px solid var(--sage)}
+.btn-o:hover{background:var(--sage);color:var(--white);transform:translateY(-2px)}
+.btn-w{background:var(--white);color:var(--sage-dark);border:1.5px solid var(--white)}
+.btn-w:hover{background:var(--ivory);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.btn-g{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.5)}
+.btn-g:hover{border-color:var(--white);background:rgba(255,255,255,.1)}
+.arr{display:inline-flex;align-items:center;transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:36px;transition:box-shadow .3s var(--ease),transform .3s var(--ease),border-color .3s}
+.card:hover{box-shadow:0 16px 48px rgba(0,0,0,.08);transform:translateY(-4px);border-color:var(--sage-light)}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.3px}
+.badge-s{background:var(--sage-pale);color:var(--sage-dark)}
+.badge-m{background:var(--mauve-pale);color:var(--mauve-deep)}
+.badge-n{background:var(--ivory-warm);color:var(--stone)}
+.rule-sage{width:48px;height:2px;background:var(--sage);margin-bottom:24px}
+
+/* PAGE HERO */
+.page-hero{background:var(--sage-deep);padding:80px 0;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(191,166,201,.15) 0%,transparent 60%)}
+.ph-content{position:relative;z-index:1}
+.ph-eye{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--mauve-light);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.ph-eye::before{content:'';display:block;width:24px;height:1px;background:var(--mauve)}
+.ph-h1{font-family:var(--fd);font-size:clamp(32px,4vw,54px);font-weight:500;color:var(--white);line-height:1.1;letter-spacing:-.5px;margin-bottom:16px}
+.ph-sub{font-size:16px;color:rgba(255,255,255,.6);max-width:560px}
+
+/* HERO (HOME) */
+.hero{min-height:calc(100vh - var(--nav-h));display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
+.hero-l{padding:80px 64px 80px 48px;display:flex;flex-direction:column;justify-content:center;max-width:680px;margin-left:auto}
+.hero-r{background:var(--white);border-left:1px solid var(--rule);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:80px 64px}
+.hero-r::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 70% 30%,rgba(111,143,130,.08) 0%,transparent 50%),radial-gradient(circle at 30% 70%,rgba(191,166,201,.1) 0%,transparent 40%)}
+.hero-ctas{display:flex;align-items:center;gap:16px;margin-top:40px;flex-wrap:wrap}
+.hero-trust{display:flex;align-items:center;gap:8px;margin-top:24px;flex-wrap:wrap}
+.trust-check{width:16px;height:16px;border-radius:50%;background:var(--sage-pale);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.trust-text{font-size:12px;color:var(--stone-light)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;position:relative;z-index:1}
+.stat{background:var(--sage-wash);padding:24px 28px;border-top:1px solid var(--rule)}
+.stat:nth-child(odd){border-right:1px solid var(--rule)}
+.stat-n{font-family:var(--fd);font-size:36px;font-weight:500;color:var(--sage-deep);line-height:1;margin-bottom:4px}
+.stat-l{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--stone)}
+.hero-tagline{display:flex;align-items:center;gap:12px;margin-top:32px;padding-top:32px;border-top:1px solid var(--rule);position:relative;z-index:1}
+.hero-tagline p{font-family:var(--fd);font-style:italic;font-size:15px;color:var(--stone);line-height:1.4}
+.hero-eye{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--sage);margin-bottom:16px}
+
+/* CRED STRIP */
+.cred-strip{background:var(--sage-deep);padding:24px 0}
+.cred-items{display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.cred-item{display:flex;align-items:center;gap:10px;padding:0 32px;border-right:1px solid rgba(255,255,255,.1)}
+.cred-item:last-child{border-right:none}
+.cred-dot{width:6px;height:6px;border-radius:50%;background:var(--mauve);flex-shrink:0}
+.cred-txt{font-size:12px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
+
+/* SERVICE TABS */
+.svc-tabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:56px}
+.svc-tab{padding:14px 24px;font-size:13.5px;font-weight:500;color:var(--stone);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--fb)}
+.svc-tab:hover{color:var(--sage)}
+.svc-tab.active{color:var(--sage-dark);border-bottom-color:var(--sage);font-weight:600}
+.tab-pane{display:none}
+.tab-pane.active{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.role-list{display:flex;flex-direction:column;gap:12px}
+.role-row{display:flex;align-items:center;gap:16px;padding:14px 18px;border:1px solid var(--rule);border-radius:6px;background:var(--white);transition:border-color .2s,box-shadow .2s}
+.role-row:hover{border-color:var(--sage-light);box-shadow:0 4px 12px rgba(111,143,130,.08)}
+.role-ico{width:36px;height:36px;background:var(--sage-pale);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.role-ico svg{width:18px;height:18px;stroke:var(--sage);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.role-name{font-size:14px;font-weight:600;color:var(--ink)}
+.role-desc{font-size:12px;color:var(--stone-light);margin-top:1px}
+.sdp{background:var(--sage-deep);border-radius:12px;padding:48px;color:var(--white);position:relative;overflow:hidden}
+.sdp-mauve{background:var(--mauve-deep)}
+.sdp::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04)}
+.sdp-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--mauve-light);margin-bottom:16px}
+.sdp-title{font-family:var(--fd);font-size:26px;font-weight:500;color:var(--white);margin-bottom:14px;line-height:1.2}
+.sdp-body{font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.65);margin-bottom:28px}
+.sdp-list{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.sdp-item{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:rgba(255,255,255,.75)}
+.sdp-ck{color:var(--mauve);font-size:15px}
+
+/* PROCESS */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.process-grid::before{content:'';position:absolute;top:28px;left:calc(12.5% + 14px);right:calc(12.5% + 14px);height:1px;background:var(--sage-light);z-index:0}
+.step{display:flex;flex-direction:column;align-items:flex-start;padding:0 28px;position:relative;z-index:1}
+.step-n{width:56px;height:56px;border-radius:50%;background:var(--white);border:2px solid var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;font-weight:500;color:var(--sage);margin-bottom:24px;flex-shrink:0}
+.step-t{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.step-b{font-size:13.5px;line-height:1.6;color:var(--stone)}
+
+/* DUAL CTA */
+.dual-cta{display:grid;grid-template-columns:1fr 1fr}
+.cta-p{padding:80px 64px;display:flex;flex-direction:column;gap:20px}
+.cta-fac{background:var(--sage-deep)}
+.cta-cli{background:var(--mauve-deep)}
+.cta-label{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.cta-title{font-family:var(--fd);font-size:32px;font-weight:500;color:var(--white);line-height:1.2}
+.cta-body{font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.6);max-width:440px}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.testi{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:36px;position:relative}
+.testi::before{content:'"';font-family:var(--fd);font-size:72px;color:rgba(255,255,255,.08);position:absolute;top:16px;left:28px;line-height:1}
+.testi-txt{font-family:var(--fd);font-style:italic;font-size:15px;line-height:1.7;color:var(--ink-soft);margin-bottom:24px;margin-top:28px;position:relative;z-index:1}
+.testi-author{display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid var(--rule)}
+.testi-av{width:40px;height:40px;border-radius:50%;background:var(--sage-pale);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--sage);flex-shrink:0}
+.testi-name{font-size:13.5px;font-weight:600;color:var(--ink)}
+.testi-role{font-size:12px;color:var(--stone-light)}
+
+/* ROLES GRID */
+.roles-strip{background:var(--sage-deep);padding:64px 0}
+.roles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.role-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:20px 16px;text-align:center;transition:background .2s}
+.role-pill:hover{background:rgba(255,255,255,.12)}
+.pill-abbr{font-family:var(--fd);font-size:26px;font-weight:500;color:var(--sage-light);margin-bottom:4px}
+.pill-nm{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+
+/* COMPLIANCE */
+.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:32px}
+.comp-step .cn{font-family:var(--fd);font-size:32px;font-weight:500;color:var(--sage);line-height:1}
+.comp-step .ct{font-size:13.5px;font-weight:600;color:var(--ink);margin:8px 0 4px}
+.comp-step .cb{font-size:12.5px;color:var(--stone);line-height:1.5}
+
+/* BENEFIT ROWS */
+.ben-row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:80px 0}
+.ben-row+.ben-row{border-top:1px solid var(--rule)}
+.ben-row:nth-child(even) .ben-vis{order:-1}
+.ben-vis{background:var(--sage-pale);border-radius:12px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.ben-vis-m{background:var(--mauve-pale)}
+.bv-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+.bv-ico{width:80px;height:80px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.bv-ico svg{width:40px;height:40px;stroke:var(--white);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.bv-ico-m{background:var(--mauve-dark)}
+.bv-lbl{font-size:24px;font-weight:700;color:var(--sage-dark)}
+.bv-sub{font-size:13px;color:var(--sage);margin-top:4px}
+.ben-list{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.ben-item{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;background:var(--sage-wash);border-radius:6px;border:1px solid var(--sage-pale)}
+.ben-item-m{background:var(--mauve-pale);border-color:var(--mauve-light)}
+.ben-ck{width:22px;height:22px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ben-ck svg{width:11px;height:11px;stroke:var(--white);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.ben-ck-m{background:var(--mauve-dark)}
+.ben-txt strong{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+.ben-txt span{font-size:13px;color:var(--stone);line-height:1.5}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:48px 1fr;gap:24px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:24px;top:48px;bottom:-8px;width:1px;background:var(--sage-light);transform:translateX(-50%)}
+.tl-n{width:48px;height:48px;border-radius:50%;background:var(--sage);color:var(--white);font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1}
+.tl-body{padding-bottom:40px}
+.tl-t{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.tl-b{font-size:14px;color:var(--stone);line-height:1.6}
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column}
+.faq-item{border-bottom:1px solid var(--rule);overflow:hidden}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left;background:none;border:none;font-family:var(--fb);transition:color .2s}
+.faq-q:hover{color:var(--sage)}
+.faq-chevron{transition:transform .3s var(--ease);flex-shrink:0}
+.faq-item.open .faq-chevron{transform:rotate(180deg)}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
+.faq-ans-inner{padding-bottom:20px;font-size:14.5px;color:var(--stone);line-height:1.75}
+
+/* CONTACT */
+.contact-layout{display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:start}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.form-label{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--stone)}
+.form-input,.form-select,.form-textarea{width:100%;padding:13px 16px;border:1.5px solid var(--rule);border-radius:4px;font-family:var(--fb);font-size:14.5px;color:var(--ink);background:var(--white);transition:border-color .2s,box-shadow .2s;outline:none;appearance:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(111,143,130,.12)}
+.form-textarea{height:120px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-tabs{display:flex;border:1.5px solid var(--rule);border-radius:4px;overflow:hidden;margin-bottom:28px}
+.form-tab{flex:1;padding:12px;font-size:13px;font-weight:600;text-align:center;cursor:pointer;color:var(--stone);background:var(--white);transition:all .2s;border:none;font-family:var(--fb)}
+.form-tab.active{background:var(--sage);color:var(--white)}
+.cd-item{display:flex;gap:16px;padding-bottom:28px;border-bottom:1px solid var(--rule)}
+.cd-item:last-child{border-bottom:none;padding-bottom:0}
+.cd-ico{width:44px;height:44px;background:var(--sage-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cd-ico svg{width:20px;height:20px;stroke:var(--sage);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.cd-lbl{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--stone-light);margin-bottom:4px}
+.cd-val{font-size:15px;font-weight:600;color:var(--ink)}
+.cd-sub{font-size:12.5px;color:var(--stone);margin-top:2px}
+.success-box{display:none;text-align:center;padding:60px 40px;background:var(--sage-wash);border-radius:8px;border:1px solid var(--sage-pale)}
+.success-box.show{display:flex;flex-direction:column;align-items:center;gap:16px}
+.success-ico{width:64px;height:64px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center}
+.success-ico svg{width:30px;height:30px;stroke:var(--white);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* CAREERS */
+.role-card{background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.role-header{display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;padding:32px 40px;cursor:pointer}
+.role-body{max-height:0;overflow:hidden;transition:max-height .45s var(--ease-out)}
+.role-inner{padding:0 40px 40px;border-top:1px solid var(--rule)}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-top:32px}
+.role-h4{font-size:13px;font-weight:700;color:var(--sage);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.role-h4-m{color:var(--mauve-dark)}
+.role-li{display:flex;gap:10px;font-size:13.5px;color:var(--stone);margin-bottom:8px}
+.role-dash{color:var(--sage);flex-shrink:0}
+.role-req-ck{color:var(--mauve-dark);flex-shrink:0}
+.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.val-card{border-radius:8px;padding:32px}
+.val-card-s{background:var(--sage-wash);border:1px solid var(--sage-pale)}
+.val-card-m{background:var(--mauve-pale);border:1px solid var(--mauve-light)}
+.val-n{font-family:var(--fd);font-size:40px;font-weight:500;color:var(--sage-pale);line-height:1;margin-bottom:12px}
+.val-n-m{color:var(--mauve-light)}
+.val-t{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.val-b{font-size:13.5px;color:var(--stone);line-height:1.7}
+.chevron-icon{transition:transform .3s;flex-shrink:0}
+
+/* FOOTER */
+.footer{background:var(--ink);color:var(--white);padding:64px 0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:48px;margin-bottom:48px}
+.footer-brand-name{font-size:17px;font-weight:700;color:var(--white);letter-spacing:-.2px}
+.footer-brand-name span{color:var(--mauve)}
+.footer-brand-sub{font-size:9px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.footer-desc{font-size:13.5px;color:rgba(255,255,255,.45);line-height:1.65;max-width:280px;margin-top:12px}
+.footer-col-t{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:20px}
+.footer-lnk{display:block;font-size:14px;color:rgba(255,255,255,.6);margin-bottom:10px;cursor:pointer;transition:color .2s}
+.footer-lnk:hover{color:var(--sage-light)}
+.footer-ci{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.footer-ci-ico{color:var(--sage);font-size:14px;margin-top:1px;flex-shrink:0}
+.footer-ci-txt{font-size:13.5px;color:rgba(255,255,255,.55);line-height:1.5}
+.footer-ci-txt strong{color:rgba(255,255,255,.75);font-weight:500;display:block}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;align-items:center;justify-content:space-between}
+.footer-copy{font-size:12.5px;color:rgba(255,255,255,.3)}
+.footer-blinks{display:flex;gap:24px}
+.footer-blnk{font-size:12.5px;color:rgba(255,255,255,.3);cursor:pointer;transition:color .2s}
+.footer-blnk:hover{color:rgba(255,255,255,.6)}
+
+/* ABOUT PAGE */
+.about-intro{display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:start}
+.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.value-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:28px;transition:border-color .2s}
+.value-card:hover{border-color:var(--sage-light)}
+.value-num{font-family:var(--fd);font-size:36px;font-weight:500;color:var(--sage-pale);line-height:1;margin-bottom:8px}
+.value-t{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.value-b{font-size:13px;color:var(--stone);line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none} .btn-nav.desktop{display:none}
+  .mob-btn{display:flex} .container{padding:0 24px}
+  .hero{grid-template-columns:1fr} .hero-r{min-height:300px;padding:48px 32px}
+  .hero-l{padding:48px 24px;margin:0} .stat-grid{grid-template-columns:repeat(4,1fr)}
+  .grid2,.grid3,.grid4,.testi-grid,.dual-cta,.tab-pane.active,.contact-layout,.about-intro,.ben-row,.role-grid,.value-grid,.footer-grid,.values-grid{grid-template-columns:1fr}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .process-grid::before{display:none}
+  .comp-grid{grid-template-columns:1fr 1fr}
+  .roles-grid{grid-template-columns:repeat(3,1fr)}
+  .cta-p{padding:48px 32px}
+  .ben-row:nth-child(even) .ben-vis{order:0}
+  .section{padding:64px 0}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .value-grid{grid-template-columns:1fr}
+  .role-header{padding:24px}
+  .role-inner{padding:0 24px 24px}
+  .role-grid{grid-template-columns:1fr;padding-top:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <svg width="36" height="36" viewBox="0 0 100 100"><rect x="8" y="8" width="28" height="84" fill="#6F8F82"/><rect x="64" y="8" width="28" height="84" fill="#6F8F82"/><rect x="8" y="42" width="84" height="16" fill="#6F8F82"/><polygon points="64,8 92,8 92,36 64,8" fill="#FAF8F4"/><polygon points="74,8 92,8 92,28" fill="#BFA6C9"/><polygon points="64,8 72,8 92,30 92,36 64,8" fill="#FAF8F4"/></svg>
+    <div>
+      <div class="nav-logo-name">HEARTHSTONE <span>&amp; CO.</span></div>
+      <div class="nav-logo-sub">Workforce Solutions</div>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <span class="nav-link" data-page="home" onclick="showPage('home')">Home</span>
+    <span class="nav-link" data-page="services" onclick="showPage('services')">Services</span>
+    <span class="nav-link" data-page="about" onclick="showPage('about')">About</span>
+
+    <span class="nav-item">
+      <span class="nav-link" data-page="facilities" onclick="showPage('facilities')">For Facilities <span class="nav-caret">▾</span></span>
+      <div class="nav-dropdown">
+        <div class="dd-section"><div class="dd-label">Acute Care</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Hospitals &amp; Health Systems</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Emergency Departments</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>ICU / Critical Care Units</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Operating Rooms (OR)</div>
+        </div>
+        <div class="dd-section"><div class="dd-label">Post-Acute &amp; Long-Term</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Skilled Nursing Facilities</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Assisted Living &amp; Memory Care</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Rehabilitation Centers</div>
+        </div>
+        <div class="dd-section"><div class="dd-label">Outpatient &amp; Community</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Clinics &amp; Physician Offices</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Dialysis Centers</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Home Health Agencies</div>
+          <div class="dd-item" onclick="showPage('facilities')"><span class="dd-dot"></span>Behavioral &amp; Correctional Health</div>
+        </div>
+      </div>
+    </span>
+
+    <span class="nav-item">
+      <span class="nav-link" data-page="clinicians" onclick="showPage('clinicians')">For Clinicians <span class="nav-caret">▾</span></span>
+      <div class="nav-dropdown">
+        <div class="dd-section"><div class="dd-label">Nursing</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Registered Nurses (RN)</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>LVN / LPN</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>CNA / CMA</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Travel Nurses</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>ICU / ER / OR Specialists</div>
+        </div>
+        <div class="dd-section"><div class="dd-label">Allied Health</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Medical Assistants (MA)</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Patient Care Technicians</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Phlebotomists</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Respiratory Therapists</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>Radiology / Lab / Sterile Processing</div>
+          <div class="dd-item" onclick="showPage('clinicians')"><span class="dd-dot"></span>EVS / Unit Secretaries</div>
+        </div>
+      </div>
+    </span>
+
+    <span class="nav-item">
+      <span class="nav-link" data-page="careers" onclick="showPage('careers')">Careers <span class="nav-caret">▾</span></span>
+      <div class="nav-dropdown">
+        <div class="dd-section"><div class="dd-label">Corporate Roles</div>
+          <div class="dd-item" onclick="showPage('careers')"><span class="dd-dot"></span>Healthcare Recruiter</div>
+          <div class="dd-item" onclick="showPage('careers')"><span class="dd-dot"></span>Sales Development Rep (SDR)</div>
+          <div class="dd-item" onclick="showPage('careers')"><span class="dd-dot"></span>Payroll &amp; Billing Specialist</div>
+          <div class="dd-item" onclick="showPage('careers')"><span class="dd-dot"></span>Credentialing Coordinator</div>
+          <div class="dd-item" onclick="showPage('careers')"><span class="dd-dot"></span>Account Manager</div>
+        </div>
+      </div>
+    </span>
+
+    <span class="nav-link" data-page="contact" onclick="showPage('contact')">Contact</span>
+  </div>
+
+  <button class="btn btn-nav desktop" onclick="showPage('contact')">Request Staffing →</button>
+  <button class="mob-btn" id="mobBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mob-nav" id="mobNav">
+  <span class="mob-link" onclick="showPage('home');closeMob()">Home</span>
+  <span class="mob-link" onclick="showPage('services');closeMob()">Services</span>
+  <span class="mob-link" onclick="showPage('about');closeMob()">About</span>
+  <span class="mob-link" onclick="showPage('facilities');closeMob()">For Facilities</span>
+  <span class="mob-link" onclick="showPage('clinicians');closeMob()">For Clinicians</span>
+  <span class="mob-link" onclick="showPage('careers');closeMob()">Careers</span>
+  <span class="mob-link" onclick="showPage('contact');closeMob()">Contact</span>
+</div>
+
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div class="page active" id="page-home">
+<div class="page-content">
+
+  <section class="hero">
+    <div class="hero-l">
+      <div class="hero-eye">Houston Healthcare Staffing</div>
+      <h1 class="xl">Credentialed<br>professionals.<br><em class="sage-c">Reliable</em> placements.</h1>
+      <p class="lg" style="margin-top:24px;max-width:480px;">Per diem, contract, travel, and temp-to-hire staffing for hospitals, SNFs, ERs, ICUs, clinics, dialysis centers, and home health agencies across Greater Houston.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-p" onclick="showPage('contact')">Submit a Request <span class="arr">→</span></button>
+        <button class="btn btn-o" onclick="showPage('facilities')">How It Works</button>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-check"><svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="#6F8F82" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="trust-text">Full credential verification &nbsp;·&nbsp;</span>
+        <div class="trust-check"><svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="#6F8F82" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="trust-text">48-hour fill target &nbsp;·&nbsp;</span>
+        <div class="trust-check"><svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="#6F8F82" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></div>
+        <span class="trust-text">Houston-based</span>
+      </div>
+    </div>
+    <div class="hero-r">
+      <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--stone-light);margin-bottom:32px;position:relative;z-index:1">By the Numbers</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-n">48h</div><div class="stat-l">Fill Target</div></div>
+        <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Role Types</div></div>
+        <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Pre-Credentialed</div></div>
+        <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Houston Cities</div></div>
+      </div>
+      <div class="hero-tagline">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--mauve-dark)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        <p>"The Workforce Facilities Trust."</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cred-strip">
+    <div class="cred-items">
+      <div class="cred-item"><div class="cred-dot"></div><span class="cred-txt">License Verification</span></div>
+      <div class="cred-item"><div class="cred-dot"></div><span class="cred-txt">Background Screening</span></div>
+      <div class="cred-item"><div class="cred-dot"></div><span class="cred-txt">Drug Testing</span></div>
+      <div class="cred-item"><div class="cred-dot"></div><span class="cred-txt">CPR / BLS Confirmed</span></div>
+      <div class="cred-item"><div class="cred-dot"></div><span class="cred-txt">HIPAA Trained</span></div>
+      <div class="cred-item"><div class="cred-dot"></div><span class="cred-txt">OIG / SAM Cleared</span></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:48px;align-items:start;margin-bottom:48px;">
+        <div><div class="eyebrow">What We Offer</div><h2 class="lg">Staffing solutions for every care setting.</h2></div>
+        <div style="padding-top:48px;"><p class="lg">From per diem coverage to long-term travel assignments, Hearthstone & Co. staffs the full range of healthcare roles across Greater Houston — every professional fully credentialed before day one.</p></div>
+      </div>
+      <div class="svc-tabs">
+        <button class="svc-tab active" onclick="switchTab('tab-fac',this)">For Facilities</button>
+        <button class="svc-tab" onclick="switchTab('tab-clin',this)">For Clinicians</button>
+        <button class="svc-tab" onclick="switchTab('tab-travel',this)">Travel Nurses</button>
+        <button class="svc-tab" onclick="switchTab('tab-types',this)">Staffing Types</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-fac">
+        <div class="role-list">
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="role-name">CNA — Certified Nursing Assistant</div><div class="role-desc">SNFs, assisted living, long-term care</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div><div class="role-name">LVN / LPN — Licensed Vocational Nurse</div><div class="role-desc">Clinics, SNFs, home health, dialysis</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div><div class="role-name">RN — Registered Nurse</div><div class="role-desc">Hospitals, post-acute, ICU, ER, OR</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><div class="role-name">Medical Assistant (MA)</div><div class="role-desc">Physician offices, outpatient clinics</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><div class="role-name">PCT, EVS &amp; Allied Health</div><div class="role-desc">Hospitals, facilities, diagnostic support</div></div></div>
+        </div>
+        <div class="sdp">
+          <div class="sdp-label">For Facilities</div>
+          <div class="sdp-title">Fill gaps with verified professionals.</div>
+          <div class="sdp-body">Every professional has a complete, verified credential file before placement. No shortcuts. No assumptions. Reliable coverage you can count on.</div>
+          <div class="sdp-list">
+            <div class="sdp-item"><span class="sdp-ck">✓</span>48-hour fill target for per diem requests</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Serving 20+ Houston-area cities</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Complete credential file available for audit</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Single account contact for all requests</div>
+          </div>
+          <button class="btn btn-g" onclick="showPage('facilities')">Learn More <span class="arr">→</span></button>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-clin">
+        <div class="role-list">
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="role-name">Flexible Per Diem Shifts</div><div class="role-desc">Choose your schedule — work when you want</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div><div class="role-name">Contract Assignments</div><div class="role-desc">13-week and multi-month placements</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div><div class="role-name">One Credential File</div><div class="role-desc">Submit once, access multiple facilities</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><div class="role-name">Competitive, Transparent Rates</div><div class="role-desc">Documented pay — no surprises</div></div></div>
+        </div>
+        <div class="sdp sdp-mauve">
+          <div class="sdp-label">For Clinicians</div>
+          <div class="sdp-title">Work on your terms.</div>
+          <div class="sdp-body">Submit your credential file once and access placement opportunities across our entire facility network in Greater Houston.</div>
+          <div class="sdp-list">
+            <div class="sdp-item"><span class="sdp-ck">✓</span>No long-term commitment required</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Per diem, contract, and temp-to-hire</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Timely pay on verified timesheets</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Direct, responsive communication</div>
+          </div>
+          <button class="btn btn-g" onclick="showPage('clinicians')">Learn More <span class="arr">→</span></button>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-travel">
+        <div class="role-list">
+          <div class="role-row" style="border-color:var(--mauve-light)"><div class="role-ico" style="background:var(--mauve-pale)"><svg viewBox="0 0 24 24" style="stroke:var(--mauve-dark)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="role-name">Travel RN Placement</div><div class="role-desc">13-week contracts, all acute care specialties</div></div></div>
+          <div class="role-row" style="border-color:var(--mauve-light)"><div class="role-ico" style="background:var(--mauve-pale)"><svg viewBox="0 0 24 24" style="stroke:var(--mauve-dark)"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div><div class="role-name">ICU / ER / OR Specialists</div><div class="role-desc">Critical care, emergency, perioperative</div></div></div>
+          <div class="role-row" style="border-color:var(--mauve-light)"><div class="role-ico" style="background:var(--mauve-pale)"><svg viewBox="0 0 24 24" style="stroke:var(--mauve-dark)"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="role-name">NICU / L&amp;D / PACU</div><div class="role-desc">Specialty nursing, extended contracts</div></div></div>
+          <div class="role-row" style="border-color:var(--mauve-light)"><div class="role-ico" style="background:var(--mauve-pale)"><svg viewBox="0 0 24 24" style="stroke:var(--mauve-dark)"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div><div class="role-name">Compact &amp; Multi-State Licensing</div><div class="role-desc">TX Nurse Licensure Compact support</div></div></div>
+        </div>
+        <div class="sdp sdp-mauve">
+          <div class="sdp-label">Travel Nurse Program</div>
+          <div class="sdp-title">Flexible placements. Full support.</div>
+          <div class="sdp-body">We manage the full placement — credentialing, licensing, and housing coordination guidance included. All specialties considered.</div>
+          <div class="sdp-list">
+            <div class="sdp-item"><span class="sdp-ck">✓</span>13-week and extended contracts</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>ICU, ER, OR, med-surg, NICU, L&D</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Compact and multi-state license support</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Competitive rates — transparent from day one</div>
+          </div>
+          <button class="btn btn-g" onclick="showPage('clinicians')">Apply as Travel Nurse <span class="arr">→</span></button>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-types">
+        <div class="role-list">
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="role-name">Per Diem Staffing</div><div class="role-desc">Same-day and short-notice coverage</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="role-name">Contract Staffing</div><div class="role-desc">Multi-week and multi-month assignments</div></div></div>
+          <div class="role-row" style="border-color:var(--mauve-light)"><div class="role-ico" style="background:var(--mauve-pale)"><svg viewBox="0 0 24 24" style="stroke:var(--mauve-dark)"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="role-name">Travel Nurse Placement</div><div class="role-desc">13-week travel contracts, all specialties</div></div></div>
+          <div class="role-row"><div class="role-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div class="role-name">Temp-to-Hire</div><div class="role-desc">Trial placements with permanent conversion</div></div></div>
+        </div>
+        <div class="sdp">
+          <div class="sdp-label">Engagement Models</div>
+          <div class="sdp-title">Match the right model to your need.</div>
+          <div class="sdp-body">Whether you need immediate coverage, a planned contract, a travel nurse, or a future permanent hire — we structure the engagement to fit your operational reality.</div>
+          <div class="sdp-list">
+            <div class="sdp-item"><span class="sdp-ck">✓</span>No volume commitments required</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Use us when you need us</div>
+            <div class="sdp-item"><span class="sdp-ck">✓</span>Consistent credentialing across all types</div>
+          </div>
+          <button class="btn btn-g" onclick="showPage('services')">View All Services <span class="arr">→</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--sage-wash)">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:64px">
+        <div class="eyebrow eyebrow-center">How It Works</div>
+        <h2 class="lg">Up and running in 48 hours.</h2>
+      </div>
+      <div class="process-grid">
+        <div class="step"><div class="step-n">1</div><div class="step-t">Discovery Call</div><p class="step-b">We review your facility's staffing needs, credential requirements, and shift preferences in a 20-minute call.</p></div>
+        <div class="step"><div class="step-n">2</div><div class="step-t">Service Agreement</div><p class="step-b">Sign a Client Service Agreement. We build your facility profile in our placement system.</p></div>
+        <div class="step"><div class="step-n">3</div><div class="step-t">Submit Requests</div><p class="step-b">Contact your account rep with shift needs. We source from our active bench of pre-credentialed professionals.</p></div>
+        <div class="step"><div class="step-n">4</div><div class="step-t">First Placement</div><p class="step-b">Receive a complete credential file before the professional's first day. Approve timesheets. Invoice handled promptly.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="dual-cta">
+    <div class="cta-p cta-fac">
+      <div class="cta-label">For Healthcare Facilities</div>
+      <div class="cta-title">Need coverage for your facility?</div>
+      <div class="cta-body">Submit a staffing request and we'll match you with pre-credentialed professionals — per diem, contract, travel, or temp-to-hire.</div>
+      <div><button class="btn btn-w" onclick="showPage('contact')">Submit a Request <span class="arr">→</span></button></div>
+    </div>
+    <div class="cta-p cta-cli">
+      <div class="cta-label">For Healthcare Professionals</div>
+      <div class="cta-title">Looking for flexible placement?</div>
+      <div class="cta-body">Join our network of credentialed CNAs, LVNs, RNs, travel nurses, and allied health professionals working across Greater Houston.</div>
+      <div><button class="btn btn-g" onclick="showPage('clinicians')">Apply to Our Network <span class="arr">→</span></button></div>
+    </div>
+  </div>
+
+  <section class="section" style="background:var(--sage-deep)">
+    <div class="container">
+      <div class="eyebrow" style="color:var(--mauve-light)">What They Say</div>
+      <h2 class="lg" style="margin-bottom:48px;color:var(--white)">Trusted by Houston healthcare teams.</h2>
+      <div class="testi-grid">
+        <div class="testi" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)"><p class="testi-txt" style="color:rgba(255,255,255,.85)">"We had a last-minute call-out on a night shift and Hearthstone filled it in under four hours with a CNA whose credential file was ready to review. That's the standard we needed."</p><div class="testi-author" style="border-top-color:rgba(255,255,255,.1)"><div class="testi-av" style="background:rgba(255,255,255,.12);color:var(--white)">D</div><div><div class="testi-name" style="color:var(--white)">Director of Nursing</div><div class="testi-role" style="color:rgba(255,255,255,.45)">Skilled Nursing Facility, Katy TX</div></div></div></div>
+        <div class="testi" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)"><p class="testi-txt" style="color:rgba(255,255,255,.85)">"I submitted my documents once and had my first placement within 48 hours. Clear communication, no games, and I knew exactly what I was walking into."</p><div class="testi-author" style="border-top-color:rgba(255,255,255,.1)"><div class="testi-av" style="background:rgba(191,166,201,.25);color:var(--mauve-light)">M</div><div><div class="testi-name" style="color:var(--white)">Registered Nurse (RN)</div><div class="testi-role" style="color:rgba(255,255,255,.45)">Per Diem, Houston TX</div></div></div></div>
+        <div class="testi" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)"><p class="testi-txt" style="color:rgba(255,255,255,.85)">"Other agencies sent people without verifying credentials. Hearthstone has never sent us a professional whose paperwork wasn't complete. That matters in a dialysis center."</p><div class="testi-author" style="border-top-color:rgba(255,255,255,.1)"><div class="testi-av" style="background:rgba(255,255,255,.12);color:var(--white)">S</div><div><div class="testi-name" style="color:var(--white)">Staffing Coordinator</div><div class="testi-role" style="color:rgba(255,255,255,.45)">Dialysis Center, Sugar Land TX</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--sage-wash);padding:64px 0">
+    <div class="container" style="text-align:center">
+      <h2 class="md" style="margin-bottom:12px">Ready to get started?</h2>
+      <p class="md" style="margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto">Contact us today to schedule a discovery call or submit a staffing request.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="showPage('contact')">Contact Us <span class="arr">→</span></button>
+        <button class="btn btn-o" onclick="showPage('services')">View Services</button>
+      </div>
+    </div>
+  </section>
+
+</div></div><!-- /home -->
+
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<div class="page" id="page-services">
+<div class="page-content">
+  <div class="page-hero"><div class="container ph-content">
+    <div class="ph-eye">Our Services</div>
+    <div class="ph-h1">Healthcare staffing, built<br>on credential integrity.</div>
+    <div class="ph-sub">Per diem, contract, travel, and temp-to-hire placement of verified healthcare professionals across Greater Houston.</div>
+  </div></div>
+
+  <section class="section"><div class="container">
+    <div class="eyebrow">Engagement Models</div>
+    <h2 class="lg" style="margin-bottom:48px">Four ways to staff.</h2>
+    <div class="grid4">
+      <div class="card" style="padding:28px"><div style="width:52px;height:52px;background:var(--sage-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h3 class="sm" style="margin-bottom:10px">Per Diem</h3><p class="sm">Same-day and short-notice placement. Target fill: 48 hours.</p></div>
+      <div class="card" style="padding:28px"><div style="width:52px;height:52px;background:var(--sage-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><h3 class="sm" style="margin-bottom:10px">Contract</h3><p class="sm">Multi-week to multi-month for planned gaps and seasonal demand.</p></div>
+      <div class="card" style="padding:28px;border-color:var(--mauve-light)"><div style="width:52px;height:52px;background:var(--mauve-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--mauve-dark)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h3 class="sm" style="margin-bottom:10px">Travel Nurse <span class="badge badge-m" style="font-size:10px;margin-left:6px">Available</span></h3><p class="sm">13-week travel assignments with full credential and licensing support.</p></div>
+      <div class="card" style="padding:28px"><div style="width:52px;height:52px;background:var(--sage-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3 class="sm" style="margin-bottom:10px">Temp-to-Hire</h3><p class="sm">Evaluate a professional in your facility before making a permanent offer.</p></div>
+    </div>
+  </div></section>
+
+  <div class="roles-strip"><div class="container">
+    <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:32px;text-align:center">Roles We Staff</div>
+    <div class="roles-grid">
+      <div class="role-pill"><div class="pill-abbr">CNA</div><div class="pill-nm">Certified Nursing Assistant</div></div>
+      <div class="role-pill"><div class="pill-abbr">CMA</div><div class="pill-nm">Certified Medical Assistant</div></div>
+      <div class="role-pill"><div class="pill-abbr">LVN</div><div class="pill-nm">Licensed Vocational Nurse</div></div>
+      <div class="role-pill"><div class="pill-abbr">RN</div><div class="pill-nm">Registered Nurse</div></div>
+      <div class="role-pill" style="border-color:rgba(191,166,201,.35)"><div class="pill-abbr" style="color:var(--mauve-light)">Travel RN</div><div class="pill-nm">Travel Nurse Placement</div></div>
+      <div class="role-pill" style="border-color:rgba(191,166,201,.35)"><div class="pill-abbr" style="color:var(--mauve-light)">ICU/ER</div><div class="pill-nm">Critical Care Specialists</div></div>
+      <div class="role-pill" style="border-color:rgba(191,166,201,.35)"><div class="pill-abbr" style="color:var(--mauve-light)">OR</div><div class="pill-nm">Surgical / Periop Nurses</div></div>
+      <div class="role-pill"><div class="pill-abbr">MA</div><div class="pill-nm">Medical Assistant</div></div>
+      <div class="role-pill"><div class="pill-abbr">PCT</div><div class="pill-nm">Patient Care Technician</div></div>
+      <div class="role-pill"><div class="pill-abbr">RT</div><div class="pill-nm">Respiratory Therapist</div></div>
+      <div class="role-pill"><div class="pill-abbr">Rad</div><div class="pill-nm">Radiology / Imaging</div></div>
+      <div class="role-pill"><div class="pill-abbr">EVS</div><div class="pill-nm">Environmental Services</div></div>
+    </div>
+  </div></div>
+
+  <section class="section"><div class="container">
+    <div class="eyebrow">Care Settings</div>
+    <h2 class="lg" style="margin-bottom:48px">Facilities we serve.</h2>
+    <div class="grid4">
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🏥</div><h3 class="sm" style="margin-bottom:6px">Hospitals &amp; Health Systems</h3><p class="sm">RNs, LVNs, PCTs, EVS for ICU, telemetry, med-surg, and ED units.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🚨</div><h3 class="sm" style="margin-bottom:6px">Emergency Departments</h3><p class="sm">ER-experienced RNs and technicians for high-volume trauma settings.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🫀</div><h3 class="sm" style="margin-bottom:6px">ICU / Critical Care</h3><p class="sm">Medical, surgical, cardiac, and neuro ICU environments.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">⚕️</div><h3 class="sm" style="margin-bottom:6px">Operating Rooms (OR)</h3><p class="sm">Perioperative nurses including scrub techs and circulating RNs.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🏨</div><h3 class="sm" style="margin-bottom:6px">Skilled Nursing Facilities</h3><p class="sm">CNA, LVN, RN for long-term and post-acute care.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🧠</div><h3 class="sm" style="margin-bottom:6px">Memory Care &amp; Assisted Living</h3><p class="sm">CNAs and support staff for memory care and AL communities.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🔄</div><h3 class="sm" style="margin-bottom:6px">Rehabilitation Centers</h3><p class="sm">Post-acute inpatient and outpatient rehab staffing.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🏠</div><h3 class="sm" style="margin-bottom:6px">Home Health Agencies</h3><p class="sm">In-home skilled visits, wound care, IV therapy.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🩺</div><h3 class="sm" style="margin-bottom:6px">Clinics &amp; Physician Groups</h3><p class="sm">MAs, LVNs, PCTs for primary care, specialty, urgent care.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">💉</div><h3 class="sm" style="margin-bottom:6px">Dialysis Centers</h3><p class="sm">Dialysis-trained nurses and technicians.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">💬</div><h3 class="sm" style="margin-bottom:6px">Behavioral Health</h3><p class="sm">CNAs and RNs for inpatient, residential, and community settings.</p></div>
+      <div class="card" style="padding:24px"><div style="font-size:28px;margin-bottom:10px">🏛️</div><h3 class="sm" style="margin-bottom:6px">Correctional &amp; School Health</h3><p class="sm">LVNs and RNs for correctional clinics and school district programs.</p></div>
+    </div>
+  </div></section>
+
+  <section class="section" style="background:var(--sage-wash)"><div class="container">
+    <div class="eyebrow">Compliance Standard</div>
+    <h2 class="lg" style="margin-bottom:12px">Every placement. Every time.</h2>
+    <p class="lg" style="max-width:600px;margin-bottom:32px">No professional is submitted to a facility until their credential file is complete and verified.</p>
+    <div class="comp-grid">
+      <div class="comp-step"><div class="cn">01</div><div class="ct">License Verification</div><div class="cb">Active license confirmed through Texas BON before any placement.</div></div>
+      <div class="comp-step"><div class="cn">02</div><div class="ct">Background Screening</div><div class="cb">7-year criminal background plus OIG and SAM exclusion screening.</div></div>
+      <div class="comp-step"><div class="cn">03</div><div class="ct">Drug &amp; Health Testing</div><div class="cb">10-panel drug screen, immunization review, and TB documentation.</div></div>
+      <div class="comp-step"><div class="cn">04</div><div class="ct">Certifications</div><div class="cb">CPR/BLS confirmation, HIPAA training, facility orientation acknowledgment.</div></div>
+    </div>
+  </div></section>
+
+  <section style="background:var(--sage-deep);padding:80px 0"><div class="container" style="text-align:center">
+    <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--mauve-light);margin-bottom:16px">Ready to Start?</div>
+    <h2 class="lg" style="color:var(--white);margin-bottom:16px">Let's build your facility's staffing plan.</h2>
+    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Schedule a discovery call or submit a staffing request. Most facilities are active in our system within 24 hours of agreement execution.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-w" onclick="showPage('contact')">Get Started <span class="arr">→</span></button>
+      <button class="btn btn-g" onclick="showPage('facilities')">For Facilities</button>
+    </div>
+  </div></section>
+
+</div></div><!-- /services -->
+
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<div class="page" id="page-about">
+<div class="page-content">
+  <div class="page-hero"><div class="container ph-content">
+    <div class="ph-eye">About Us</div>
+    <div class="ph-h1">A workforce partner, not<br>just a staffing vendor.</div>
+    <div class="ph-sub">Houston-based. Compliance-first. Built to serve the Greater Houston healthcare community.</div>
+  </div></div>
+
+  <section class="section"><div class="container about-intro">
+    <div>
+      <div class="rule-sage"></div>
+      <h2 class="lg" style="margin-bottom:24px">Who we are.</h2>
+      <p class="lg" style="margin-bottom:18px">Hearthstone & Co. Workforce Solutions is a healthcare staffing agency headquartered in Houston, Texas, operating as a division of The Shiylohe Collective. We provide per diem, contract, travel, and temp-to-hire staffing to skilled nursing facilities, assisted living communities, home health agencies, dialysis centers, hospitals, and outpatient clinics throughout Greater Houston.</p>
+      <p class="md" style="margin-bottom:18px">We operate with a compliance-first model: every professional placed through Hearthstone & Co. undergoes a rigorous pre-placement credentialing process before their first day.</p>
+      <p class="md" style="margin-bottom:32px">Our agency was built on the premise that healthcare facilities and healthcare professionals both deserve better than the average staffing experience — and that reliability, transparency, and accountability are not optional features.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="showPage('contact')">Contact Us <span class="arr">→</span></button>
+        <button class="btn btn-o" onclick="showPage('services')">Our Services</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="background:var(--sage-wash);border-left:3px solid var(--sage);padding:28px 32px;border-radius:0 8px 8px 0">
+        <div class="eyebrow" style="margin-bottom:10px">Mission</div>
+        <p style="font-family:var(--fd);font-style:italic;font-size:16px;color:var(--ink);line-height:1.6">To provide Greater Houston healthcare facilities with credentialed, reliable, and compliant workforce solutions that reduce operational risk and support the professionals who deliver care every day.</p>
+      </div>
+      <div style="background:var(--mauve-pale);border-left:3px solid var(--mauve-dark);padding:28px 32px;border-radius:0 8px 8px 0">
+        <div class="eyebrow" style="margin-bottom:10px;color:var(--mauve-deep)">Vision</div>
+        <p style="font-family:var(--fd);font-style:italic;font-size:16px;color:var(--ink);line-height:1.6">To become the most trusted healthcare staffing partner in the Greater Houston metropolitan area by consistently delivering professionals who meet the highest standards of credential integrity and clinical readiness.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:20px;text-align:center"><div style="font-family:var(--fd);font-size:32px;font-weight:500;color:var(--sage);line-height:1;margin-bottom:4px">20+</div><div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--stone-light)">Houston Cities</div></div>
+        <div style="background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:20px;text-align:center"><div style="font-family:var(--fd);font-size:32px;font-weight:500;color:var(--mauve-dark);line-height:1;margin-bottom:4px">100%</div><div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--stone-light)">Pre-Credentialed</div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="section" style="background:var(--sage-wash)"><div class="container">
+    <div class="eyebrow">Our Values</div>
+    <h2 class="lg" style="margin-bottom:48px">What we hold to.</h2>
+    <div class="values-grid">
+      <div class="value-card"><div class="value-num">01</div><div class="value-t">Credential Integrity</div><p class="value-b">Every placement begins with a verified, complete credential file. No exceptions, no shortcuts.</p></div>
+      <div class="value-card"><div class="value-num">02</div><div class="value-t">Operational Reliability</div><p class="value-b">We hold ourselves to response time and fill rate standards that facilities can plan around.</p></div>
+      <div class="value-card"><div class="value-num">03</div><div class="value-t">Professional Respect</div><p class="value-b">Healthcare professionals are not commodities. We treat every clinician with the same standard we expect from facilities.</p></div>
+      <div class="value-card"><div class="value-num">04</div><div class="value-t">Compliance First</div><p class="value-b">Regulatory adherence is built into every step of our intake, credentialing, and placement process.</p></div>
+      <div class="value-card" style="grid-column:1/-1"><div class="value-num">05</div><div class="value-t">Accountability</div><p class="value-b">When something goes wrong, we respond directly. We do not deflect, disappear, or make excuses. We acknowledge the issue and fix it.</p></div>
+    </div>
+  </div></section>
+
+  <section class="section" style="background:var(--sage-deep)"><div class="container" style="text-align:center">
+    <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--mauve-light);margin-bottom:16px">Service Area</div>
+    <h2 class="lg" style="color:var(--white);margin-bottom:32px">Greater Houston, in full.</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:680px;margin:0 auto">
+      <span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Houston</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Katy</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Sugar Land</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Pearland</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">The Woodlands</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Baytown</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Pasadena</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">League City</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Conroe</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Galveston</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Clear Lake</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Spring</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Humble</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Missouri City</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Stafford</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Richmond</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Tomball</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Friendswood</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">Webster</span><span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)">La Marque</span>
+    </div>
+  </div></section>
+
+</div></div><!-- /about -->
+
+
+<!-- ═══════════════ FOR FACILITIES ═══════════════ -->
+<div class="page" id="page-facilities">
+<div class="page-content">
+  <div class="page-hero"><div class="container ph-content">
+    <div class="ph-eye">For Facilities</div>
+    <div class="ph-h1">Fill your gaps.<br>Maintain your standard.</div>
+    <div class="ph-sub">Pre-credentialed professionals for SNFs, hospitals, clinics, home health agencies, dialysis centers, and more across Greater Houston.</div>
+  </div></div>
+
+  <section class="section"><div class="container">
+    <div class="ben-row">
+      <div>
+        <div class="eyebrow">Credential Integrity</div>
+        <h2 class="md" style="margin-bottom:14px">No professional reaches your floor without a complete file.</h2>
+        <p class="md" style="margin-bottom:20px">Every professional goes through license verification, background screening, drug testing, immunization review, CPR/BLS, HIPAA training, and OIG/SAM exclusion screening before placement.</p>
+        <div class="ben-list">
+          <div class="ben-item"><div class="ben-ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>Active license verification</strong><span>Confirmed through Texas BON before every placement.</span></div></div>
+          <div class="ben-item"><div class="ben-ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>7-year background check</strong><span>Criminal screening plus OIG and SAM exclusion database review.</span></div></div>
+          <div class="ben-item"><div class="ben-ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>Complete file on request</strong><span>Documentation available to your compliance team for audit.</span></div></div>
+        </div>
+      </div>
+      <div class="ben-vis"><div class="bv-inner"><div class="bv-ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="bv-lbl">100%</div><div class="bv-sub">Pre-Credentialed Before Placement</div></div></div>
+    </div>
+    <div class="ben-row">
+      <div>
+        <div class="eyebrow">Operational Speed</div>
+        <h2 class="md" style="margin-bottom:14px">48-hour fill target. One point of contact.</h2>
+        <p class="md" style="margin-bottom:20px">We maintain an active bench of pre-credentialed professionals. Your account representative handles every request from submission through shift confirmation.</p>
+        <div class="ben-list">
+          <div class="ben-item"><div class="ben-ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>48-hour per diem fill target</strong><span>For facilities within our active Greater Houston service area.</span></div></div>
+          <div class="ben-item"><div class="ben-ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>Single account contact</strong><span>One rep for all requests, timesheets, and invoicing.</span></div></div>
+          <div class="ben-item"><div class="ben-ck"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>No volume commitments</strong><span>Use us when you need us. No minimums, no penalties.</span></div></div>
+        </div>
+      </div>
+      <div class="ben-vis"><div class="bv-inner"><div class="bv-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="bv-lbl">48 Hours</div><div class="bv-sub">Target Fill Time for Per Diem</div></div></div>
+    </div>
+  </div></section>
+
+  <section class="section" style="background:var(--sage-wash)"><div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start">
+      <div><div class="eyebrow">Getting Started</div><h2 class="lg" style="margin-bottom:16px">Operational in 24–48 hours.</h2><p class="md">Most facilities are active in our system within 24 to 48 hours of agreement execution. No volume commitments required.</p></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-n">1</div><div class="tl-body"><div class="tl-t">Discovery Call</div><p class="tl-b">20-minute call to review your facility's credential requirements, shift needs, and billing terms.</p></div></div>
+        <div class="tl-item"><div class="tl-n">2</div><div class="tl-body"><div class="tl-t">Service Agreement</div><p class="tl-b">Sign the Client Service Agreement. We build your facility profile with specific requirements.</p></div></div>
+        <div class="tl-item"><div class="tl-n">3</div><div class="tl-body"><div class="tl-t">First Staffing Request</div><p class="tl-b">Contact your account rep. We source and confirm placement with a full credential file.</p></div></div>
+        <div class="tl-item"><div class="tl-n">4</div><div class="tl-body"><div class="tl-t">Ongoing Partnership</div><p class="tl-b">Approve timesheets. Receive invoices. Provide feedback. Repeat.</p></div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section style="background:var(--sage-deep);padding:80px 0"><div class="container" style="text-align:center">
+    <h2 class="lg" style="color:var(--white);margin-bottom:16px">Submit your first staffing request.</h2>
+    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Call (512) 630-0794, email info@hearthstoneandco.com, or fill out our contact form.</p>
+    <button class="btn btn-w" onclick="showPage('contact')">Contact Us Now <span class="arr">→</span></button>
+  </div></section>
+
+</div></div><!-- /facilities -->
+
+
+<!-- ═══════════════ FOR CLINICIANS ═══════════════ -->
+<div class="page" id="page-clinicians">
+<div class="page-content">
+  <div class="page-hero" style="background:var(--mauve-deep)"><div class="container ph-content">
+    <div class="ph-eye">For Clinicians</div>
+    <div class="ph-h1">Work on your terms.<br>In your city.</div>
+    <div class="ph-sub">Flexible per diem, contract, and travel placements for CNAs, LVNs, RNs, MAs, PCTs, and allied health professionals across Greater Houston.</div>
+  </div></div>
+
+  <section class="section"><div class="container">
+    <div class="ben-row">
+      <div>
+        <div class="eyebrow" style="color:var(--mauve-dark)">Flexible Work</div>
+        <h2 class="md" style="margin-bottom:14px">One credential file. Multiple opportunities.</h2>
+        <p class="md" style="margin-bottom:20px">Submit your credential file once. We handle verification and maintain it in our system. No repeated paperwork for every new facility.</p>
+        <div class="ben-list">
+          <div class="ben-item ben-item-m"><div class="ben-ck ben-ck-m"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>Local placements and travel contracts</strong><span>Houston-area per diem and contract shifts, plus 13-week travel assignments.</span></div></div>
+          <div class="ben-item ben-item-m"><div class="ben-ck ben-ck-m"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>Per diem, contract, and temp-to-hire</strong><span>Flexible engagement options for your availability and goals.</span></div></div>
+          <div class="ben-item ben-item-m"><div class="ben-ck ben-ck-m"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div><div class="ben-txt"><strong>Temp-to-hire conversions</strong><span>Interested in going permanent? We facilitate the transition.</span></div></div>
+        </div>
+      </div>
+      <div class="ben-vis ben-vis-m"><div class="bv-inner"><div class="bv-ico bv-ico-m"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="bv-lbl" style="color:var(--mauve-deep)">Your Schedule</div><div class="bv-sub" style="color:var(--mauve-dark)">Work When You Choose</div></div></div>
+    </div>
+  </div></section>
+
+  <!-- Travel Nurse Feature -->
+  <section class="section" style="background:var(--mauve-deep)"><div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center">
+      <div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--mauve-light);margin-bottom:16px">Travel Nurse Program</div>
+        <h2 class="lg" style="color:var(--white);margin-bottom:14px">Ready to travel? We'll take it from here.</h2>
+        <p style="font-size:15px;line-height:1.75;color:rgba(255,255,255,.65);margin-bottom:24px">We manage the full process — credential verification, multi-state license support, facility briefings, and housing coordination guidance.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px">
+          <div style="display:flex;align-items:flex-start;gap:12px"><div style="width:22px;height:22px;border-radius:50%;background:var(--mauve);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></div><div><strong style="display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,.9)">All acute care specialties</strong><span style="font-size:13px;color:rgba(255,255,255,.55)">ICU, ER, OR, NICU, med-surg, telemetry, L&D, PACU</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:12px"><div style="width:22px;height:22px;border-radius:50%;background:var(--mauve);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></div><div><strong style="display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,.9)">Compact &amp; multi-state license support</strong><span style="font-size:13px;color:rgba(255,255,255,.55)">TX Nurse Licensure Compact verification assistance</span></div></div>
+          <div style="display:flex;align-items:flex-start;gap:12px"><div style="width:22px;height:22px;border-radius:50%;background:var(--mauve);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></div><div><strong style="display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,.9)">Weekly pay on verified timesheets</strong><span style="font-size:13px;color:rgba(255,255,255,.55)">Competitive documented rates. No surprises.</span></div></div>
+        </div>
+        <button class="btn btn-w" onclick="showPage('contact')">Inquire About Travel Placements <span class="arr">→</span></button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:24px"><div style="font-family:var(--fd);font-size:36px;font-weight:500;color:var(--white);line-height:1;margin-bottom:6px">13wk</div><div style="font-size:11px;color:rgba(255,255,255,.45);letter-spacing:2px;text-transform:uppercase">Standard Contract</div></div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:24px"><div style="font-family:var(--fd);font-size:36px;font-weight:500;color:var(--mauve-light);line-height:1;margin-bottom:6px">10+</div><div style="font-size:11px;color:rgba(255,255,255,.45);letter-spacing:2px;text-transform:uppercase">Specialties Placed</div></div>
+        <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:24px;grid-column:1/-1"><p style="font-size:14px;font-style:italic;color:rgba(255,255,255,.65);line-height:1.6;font-family:var(--fd)">"I submitted my credentials once and was placed in a Houston ICU within a week. The process was clear and my rep was responsive throughout."</p><div style="font-size:12px;color:rgba(255,255,255,.35);margin-top:10px">— Travel ICU RN, Houston TX</div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="section" style="background:var(--mauve-pale)"><div class="container">
+    <div style="text-align:center;margin-bottom:56px"><h2 class="lg">Credentialed and placed in four steps.</h2></div>
+    <div class="process-grid">
+      <div class="step"><div class="step-n" style="border-color:var(--mauve-light);color:var(--mauve-dark)">1</div><div class="step-t">Apply</div><p class="step-b">Submit your application at hearthstoneandco.com or contact us directly.</p></div>
+      <div class="step"><div class="step-n" style="border-color:var(--mauve-light);color:var(--mauve-dark)">2</div><div class="step-t">Submit Credentials</div><p class="step-b">Provide your license, ID, immunization records, CPR card, and required documentation.</p></div>
+      <div class="step"><div class="step-n" style="border-color:var(--mauve-light);color:var(--mauve-dark)">3</div><div class="step-t">Complete Screening</div><p class="step-b">Background check, drug screen, and orientation acknowledgment — we walk you through every step.</p></div>
+      <div class="step"><div class="step-n" style="border-color:var(--mauve-light);color:var(--mauve-dark)">4</div><div class="step-t">Start Working</div><p class="step-b">Once verified, we match you with facilities that fit your availability and preferences.</p></div>
+    </div>
+  </div></section>
+
+  <section style="background:var(--mauve-deep);padding:80px 0"><div class="container" style="text-align:center">
+    <h2 class="lg" style="color:var(--white);margin-bottom:16px">Ready to find your next placement?</h2>
+    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Apply online or call (512) 630-0794.</p>
+    <button class="btn btn-w" onclick="showPage('contact')">Apply Now <span class="arr">→</span></button>
+  </div></section>
+
+</div></div><!-- /clinicians -->
+
+
+<!-- ═══════════════ CAREERS ═══════════════ -->
+<div class="page" id="page-careers">
+<div class="page-content">
+  <div class="page-hero" style="background:var(--ivory);border-bottom:1px solid var(--rule)"><div class="container ph-content">
+    <div class="ph-eye" style="color:var(--sage)">Corporate Careers</div>
+    <div class="ph-h1" style="color:var(--ink)">Build the infrastructure behind<br>Houston's healthcare workforce.</div>
+    <div class="ph-sub" style="color:var(--stone)">Join the Hearthstone & Co. internal team — the recruiters, business developers, and operations specialists who make every placement possible.</div>
+    <div style="display:flex;gap:12px;margin-top:32px;flex-wrap:wrap">
+      <button class="btn btn-p" onclick="document.getElementById('open-roles').scrollIntoView({behavior:'smooth'})">View Open Roles <span class="arr">→</span></button>
+      <button class="btn btn-o" onclick="document.getElementById('careers-apply').scrollIntoView({behavior:'smooth'})">Apply Now</button>
+    </div>
+  </div></div>
+
+  <!-- Why Hearthstone -->
+  <section class="section"><div class="container">
+    <div style="display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:center">
+      <div>
+        <div class="eyebrow">Why Hearthstone</div>
+        <h2 class="lg" style="margin-bottom:20px">A company worth building with.</h2>
+        <p class="lg" style="margin-bottom:18px">Hearthstone & Co. is in an active growth phase — building our internal team, expanding our Houston facility network, and scaling operations across all service lines.</p>
+        <p class="md" style="margin-bottom:18px">We operate with a compliance-first, relationship-driven model. This is not a call center environment. It requires people who are organized, direct, and accountable.</p>
+        <p class="md">We are headquartered in the Houston-Katy metro area. Most roles are full-time with hybrid flexibility as the team grows.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card" style="padding:22px;display:flex;gap:14px;align-items:flex-start"><div style="width:44px;height:44px;background:var(--sage-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div><h3 class="sm" style="margin-bottom:4px">Small Team, Real Impact</h3><p class="sm">You will see the direct results of your work. No layers between effort and outcome.</p></div></div>
+        <div class="card" style="padding:22px;display:flex;gap:14px;align-items:flex-start"><div style="width:44px;height:44px;background:var(--sage-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><h3 class="sm" style="margin-bottom:4px">Growth-Stage Opportunity</h3><p class="sm">Early team members grow with the company. Titles and responsibilities scale as we expand.</p></div></div>
+        <div class="card" style="padding:22px;display:flex;gap:14px;align-items:flex-start"><div style="width:44px;height:44px;background:var(--mauve-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--mauve-dark)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><h3 class="sm" style="margin-bottom:4px">Enterprise Infrastructure</h3><p class="sm">Backed by The Shiylohe Collective — structured, multi-division enterprise from day one.</p></div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- Open Roles -->
+  <section class="section" id="open-roles" style="background:var(--sage-wash)"><div class="container">
+    <div class="eyebrow">Open Positions</div>
+    <h2 class="lg" style="margin-bottom:12px">Current openings.</h2>
+    <p class="md" style="margin-bottom:48px;max-width:560px">We are building the internal team that supports every placement, every client relationship, and every payroll cycle.</p>
+
+    <!-- Recruiter -->
+    <div class="role-card">
+      <div class="role-header" onclick="toggleRole('rc-body','rc-chev')">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="width:52px;height:52px;background:var(--sage-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px">Healthcare Recruiter</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-s">Full-Time</span><span class="badge badge-n">Houston, TX</span><span class="badge badge-n">Hybrid</span></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-p" style="padding:9px 20px;font-size:13px" onclick="event.stopPropagation();showPage('contact')">Apply</button>
+          <div class="chevron-icon" id="rc-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+      </div>
+      <div class="role-body" id="rc-body"><div class="role-inner"><div class="role-grid">
+        <div>
+          <div class="role-h4">Role Overview</div>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75;margin-bottom:14px">The Healthcare Recruiter is responsible for sourcing, screening, credentialing, and placing qualified healthcare professionals — CNAs, LVNs, RNs, and allied health staff — with our facility client network across Greater Houston.</p>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75">High activity, organized follow-through, and clear communication with both clinicians and facility contacts are the core requirements.</p>
+        </div>
+        <div>
+          <div class="role-h4">Responsibilities</div>
+          <div class="role-li"><span class="role-dash">—</span>Source and screen CNA, LVN, RN, MA, and PCT candidates via job boards, referrals, and direct outreach</div>
+          <div class="role-li"><span class="role-dash">—</span>Manage credential file completion: license, background, drug screen, immunization, CPR/BLS</div>
+          <div class="role-li"><span class="role-dash">—</span>Match professionals to facility requests based on availability and credential requirements</div>
+          <div class="role-li"><span class="role-dash">—</span>Maintain ongoing communication with active clinicians to ensure availability and fill rate targets</div>
+          <div class="role-li"><span class="role-dash">—</span>Document all activity in the ATS/CRM accurately and on time</div>
+          <div class="role-h4" style="margin-top:20px">Requirements</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>1–3 years recruiting experience; healthcare staffing preferred</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Familiarity with TX BON verification, background checks, drug screening</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>High-volume activity tolerance — this is a phone-and-pipeline role</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Houston, TX — in-person or hybrid availability required</div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <!-- SDR -->
+    <div class="role-card">
+      <div class="role-header" onclick="toggleRole('sdr-body','sdr-chev')">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="width:52px;height:52px;background:var(--mauve-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--mauve-dark)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div><div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px">Sales Development Representative (SDR)</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-m">Full-Time</span><span class="badge badge-n">Houston, TX</span><span class="badge badge-n">Hybrid</span><span class="badge badge-n">Base + Commission</span></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-p" style="padding:9px 20px;font-size:13px" onclick="event.stopPropagation();showPage('contact')">Apply</button>
+          <div class="chevron-icon" id="sdr-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+      </div>
+      <div class="role-body" id="sdr-body"><div class="role-inner"><div class="role-grid">
+        <div>
+          <div class="role-h4 role-h4-m">Role Overview</div>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75;margin-bottom:14px">The SDR identifies, contacts, and qualifies healthcare facility decision-makers — Directors of Nursing, Staffing Coordinators, HR Managers — and converts them into active Hearthstone & Co. clients.</p>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75">This is a high-activity, relationship-driven role representing Hearthstone to facilities that may currently work with other agencies or have no current vendor relationship.</p>
+          <div style="margin-top:20px;padding:18px 22px;background:var(--mauve-pale);border-radius:8px;border:1px solid var(--mauve-light)"><div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mauve-deep);margin-bottom:6px">Compensation</div><p style="font-size:13.5px;color:var(--ink-soft)">Competitive base + commission tied to new client activations and first-placement milestones.</p></div>
+        </div>
+        <div>
+          <div class="role-h4 role-h4-m">Responsibilities</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Research and prospect SNFs, hospitals, clinics, and home health agencies across Greater Houston</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Conduct outbound outreach via phone, email, and LinkedIn to schedule discovery calls</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Qualify facility needs and position Hearthstone's compliance-first model</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Support the Client Service Agreement execution process</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Maintain CRM records with complete, accurate activity data</div>
+          <div class="role-h4 role-h4-m" style="margin-top:20px">Requirements</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>1–3 years B2B sales or business development — healthcare or staffing preferred</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Comfortable with cold outreach — phone and email — as primary activity</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Professional written and verbal communication; no script-reading</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>CRM proficiency (HubSpot, Salesforce, or equivalent)</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Houston, TX — in-person or hybrid availability required</div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <!-- Payroll -->
+    <div class="role-card">
+      <div class="role-header" onclick="toggleRole('pay-body','pay-chev')">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="width:52px;height:52px;background:var(--sage-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px">Payroll &amp; Billing Specialist</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-s">Full-Time</span><span class="badge badge-n">Houston, TX</span><span class="badge badge-n">Hybrid</span></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-p" style="padding:9px 20px;font-size:13px" onclick="event.stopPropagation();showPage('contact')">Apply</button>
+          <div class="chevron-icon" id="pay-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+      </div>
+      <div class="role-body" id="pay-body"><div class="role-inner"><div class="role-grid">
+        <div>
+          <div class="role-h4">Role Overview</div>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75;margin-bottom:14px">The Payroll & Billing Specialist manages the complete financial operations cycle — from timesheet collection and approval through clinician payroll processing and facility invoice generation.</p>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75">Accuracy and timeliness are the core requirements. Clinicians depend on on-time pay. Facility clients depend on accurate invoicing. This is a mission-critical function.</p>
+        </div>
+        <div>
+          <div class="role-h4">Responsibilities</div>
+          <div class="role-li"><span class="role-dash">—</span>Collect, verify, and process weekly timesheets from all active clinicians</div>
+          <div class="role-li"><span class="role-dash">—</span>Run weekly payroll cycles in compliance with Texas labor requirements</div>
+          <div class="role-li"><span class="role-dash">—</span>Generate and deliver facility invoices; track AR and follow up on outstanding balances</div>
+          <div class="role-li"><span class="role-dash">—</span>Reconcile payroll and billing records; identify and resolve discrepancies promptly</div>
+          <div class="role-li"><span class="role-dash">—</span>Maintain audit-ready financial documentation for all transactions</div>
+          <div class="role-h4" style="margin-top:20px">Requirements</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>2+ years payroll processing or billing — staffing or healthcare preferred</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Proficiency in payroll software (QuickBooks, Paychex, ADP, or equivalent)</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Detail-oriented with strong reconciliation and documentation discipline</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Understanding of Texas labor law, overtime, and classification rules</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Houston, TX — in-person or hybrid availability required</div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <!-- Credentialing -->
+    <div class="role-card">
+      <div class="role-header" onclick="toggleRole('crd-body','crd-chev')">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="width:52px;height:52px;background:var(--sage-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div><div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px">Credentialing Coordinator</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-s">Full-Time</span><span class="badge badge-n">Houston, TX</span><span class="badge badge-n">Hybrid</span></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-p" style="padding:9px 20px;font-size:13px" onclick="event.stopPropagation();showPage('contact')">Apply</button>
+          <div class="chevron-icon" id="crd-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+      </div>
+      <div class="role-body" id="crd-body"><div class="role-inner"><div class="role-grid">
+        <div>
+          <div class="role-h4">Role Overview</div>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75;margin-bottom:14px">The Credentialing Coordinator owns the compliance pipeline for every healthcare professional in our network. You are the last checkpoint before a professional reaches a facility.</p>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75">This role requires precision, follow-through, and the ability to manage multiple candidate files simultaneously without letting anything slip through.</p>
+        </div>
+        <div>
+          <div class="role-h4">Responsibilities</div>
+          <div class="role-li"><span class="role-dash">—</span>Manage the complete pre-placement credentialing process for all incoming clinicians</div>
+          <div class="role-li"><span class="role-dash">—</span>Verify active licenses through Texas BON and applicable credentialing bodies</div>
+          <div class="role-li"><span class="role-dash">—</span>Coordinate background screening, drug testing, immunization review, and CPR/BLS verification</div>
+          <div class="role-li"><span class="role-dash">—</span>Run OIG and SAM exclusion checks; maintain screening documentation</div>
+          <div class="role-li"><span class="role-dash">—</span>Track expiration dates; initiate renewals proactively</div>
+          <div class="role-li"><span class="role-dash">—</span>Prepare audit-ready credential files and respond to facility compliance requests</div>
+          <div class="role-h4" style="margin-top:20px">Requirements</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>1–3 years in healthcare credentialing, compliance, or medical staffing operations</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Working knowledge of TX BON verification, OIG/SAM screening, and HIPAA</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Exceptional attention to detail — no tolerance for incomplete files</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Ability to manage 20+ concurrent credential files without errors</div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <!-- Account Manager -->
+    <div class="role-card">
+      <div class="role-header" onclick="toggleRole('am-body','am-chev')">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="width:52px;height:52px;background:var(--mauve-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--mauve-dark)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <div><div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px">Account Manager — Facility Relations</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-m">Full-Time</span><span class="badge badge-n">Houston, TX</span><span class="badge badge-n">Base + Commission</span></div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-p" style="padding:9px 20px;font-size:13px" onclick="event.stopPropagation();showPage('contact')">Apply</button>
+          <div class="chevron-icon" id="am-chev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+      </div>
+      <div class="role-body" id="am-body"><div class="role-inner"><div class="role-grid">
+        <div>
+          <div class="role-h4 role-h4-m">Role Overview</div>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75;margin-bottom:14px">The Account Manager is the ongoing relationship owner for all active facility clients. Once a facility signs a Client Service Agreement, the AM is their primary contact for staffing requests, timesheet approvals, issue resolution, and expansion.</p>
+          <p style="font-size:14.5px;color:var(--stone);line-height:1.75">This is not a passive account-maintenance role. It requires proactive outreach and a drive to identify opportunities to deepen the relationship.</p>
+        </div>
+        <div>
+          <div class="role-h4 role-h4-m">Responsibilities</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Serve as the single point of contact for all active facility clients</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Coordinate with the recruiting team to ensure requests are filled on time</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Conduct regular check-ins with facility contacts to assess satisfaction and anticipate needs</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Track fill rates and on-time performance at the account level</div>
+          <div class="role-li"><span class="role-dash" style="color:var(--mauve-dark)">—</span>Identify and pursue expansion within existing accounts</div>
+          <div class="role-h4 role-h4-m" style="margin-top:20px">Requirements</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>2–4 years account management or client services — healthcare or staffing preferred</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Ability to manage multiple active accounts with different needs and timelines</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>Strong written and verbal communication — you represent Hearthstone in every interaction</div>
+          <div class="role-li"><span class="role-req-ck">✓</span>CRM proficiency; comfortable building and reading performance reports</div>
+        </div>
+      </div></div></div>
+    </div>
+
+  </div></section>
+
+  <!-- Values -->
+  <section class="section"><div class="container">
+    <div class="eyebrow">Our Standard</div>
+    <h2 class="lg" style="margin-bottom:40px">What we expect — and what you can expect from us.</h2>
+    <div class="value-grid">
+      <div class="val-card val-card-s"><div class="val-n">01</div><div class="val-t">Do what you say you will do.</div><p class="val-b">Internal accountability is the same standard we hold externally. If you commit to something — it happens.</p></div>
+      <div class="val-card val-card-s"><div class="val-n">02</div><div class="val-t">Precision over speed.</div><p class="val-b">We operate in healthcare. Errors in credentialing, payroll, or client communication have real consequences.</p></div>
+      <div class="val-card val-card-s"><div class="val-n">03</div><div class="val-t">Communicate directly.</div><p class="val-b">We don't passive-communicate or leave things unsaid. If something is a problem, say it.</p></div>
+      <div class="val-card val-card-m"><div class="val-n val-n-m">04</div><div class="val-t">You will grow here.</div><p class="val-b">People who perform early have real paths forward — not hypothetical future titles.</p></div>
+      <div class="val-card val-card-m"><div class="val-n val-n-m">05</div><div class="val-t">Enterprise infrastructure from day one.</div><p class="val-b">Backed by The Shiylohe Collective — not a startup figuring it out as it goes.</p></div>
+      <div class="val-card val-card-m"><div class="val-n val-n-m">06</div><div class="val-t">The work matters.</div><p class="val-b">What we do has a direct line to patient outcomes. Every placement affects a facility's ability to deliver care.</p></div>
+    </div>
+  </div></section>
+
+  <!-- Apply -->
+  <section class="section" id="careers-apply" style="background:var(--sage-wash)"><div class="container">
+    <div style="display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:start">
+      <div>
+        <div class="eyebrow">Apply Now</div>
+        <h2 class="lg" style="margin-bottom:8px">Submit your application.</h2>
+        <p class="md" style="margin-bottom:32px">Tell us which role you're applying for and we'll follow up within three business days.</p>
+        <form id="careersForm" onsubmit="handleCareersSubmit(event)">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" placeholder="First name" required></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" placeholder="Last name" required></div>
+          </div>
+          <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="your@email.com" required></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(xxx) xxx-xxxx"></div>
+          <div class="form-group"><label class="form-label">Position Applying For</label>
+            <select class="form-select" required>
+              <option value="">Select a role...</option>
+              <option>Healthcare Recruiter</option>
+              <option>Sales Development Representative (SDR)</option>
+              <option>Payroll &amp; Billing Specialist</option>
+              <option>Credentialing Coordinator</option>
+              <option>Account Manager — Facility Relations</option>
+              <option>General Application — Future Openings</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Years of Relevant Experience</label>
+            <select class="form-select">
+              <option value="">Select...</option>
+              <option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>5–10 years</option><option>10+ years</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">LinkedIn Profile URL</label><input class="form-input" type="url" placeholder="https://linkedin.com/in/yourprofile"></div>
+          <div class="form-group"><label class="form-label">Cover Note</label><textarea class="form-textarea" style="height:140px" placeholder="Tell us why this role is the right fit. Be direct — this is not the place for a form letter."></textarea></div>
+          <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Submit Application <span class="arr">→</span></button>
+        </form>
+        <div id="careersSuccess" class="success-box" style="margin-top:16px">
+          <div class="success-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3 class="sm">Application Received</h3>
+          <p class="md" style="max-width:380px;margin:0 auto">Thank you for applying. We review every application and will follow up within three business days.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="background:var(--ink);border-radius:10px;padding:32px">
+          <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px">Direct Contact</div>
+          <div style="font-family:var(--fd);font-size:20px;font-weight:500;color:var(--white);margin-bottom:8px;line-height:1.3">Questions before applying?</div>
+          <p style="font-size:13.5px;color:rgba(255,255,255,.5);margin-bottom:20px;line-height:1.65">Reach out directly. We respond to career inquiries within one business day.</p>
+          <div style="font-size:13.5px;color:rgba(255,255,255,.7);margin-bottom:8px">📧 careers@hearthstoneandco.com</div>
+          <div style="font-size:13.5px;color:rgba(255,255,255,.7)">(512) 630-0794</div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:28px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--stone-light);margin-bottom:16px">Open Roles</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--rule)"><span style="font-size:14px;font-weight:500;color:var(--ink)">Healthcare Recruiter</span><span style="font-size:12px;color:var(--sage);font-weight:600">Full-Time</span></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--rule)"><span style="font-size:14px;font-weight:500;color:var(--ink)">SDR</span><span style="font-size:12px;color:var(--mauve-dark);font-weight:600">Base + Comm.</span></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--rule)"><span style="font-size:14px;font-weight:500;color:var(--ink)">Payroll &amp; Billing Specialist</span><span style="font-size:12px;color:var(--sage);font-weight:600">Full-Time</span></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--rule)"><span style="font-size:14px;font-weight:500;color:var(--ink)">Credentialing Coordinator</span><span style="font-size:12px;color:var(--sage);font-weight:600">Full-Time</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:14px;font-weight:500;color:var(--ink)">Account Manager</span><span style="font-size:12px;color:var(--mauve-dark);font-weight:600">Base + Comm.</span></div>
+          </div>
+        </div>
+        <div style="background:var(--sage-deep);border-radius:10px;padding:28px">
+          <p style="font-size:13px;font-style:italic;color:rgba(255,255,255,.6);line-height:1.7;font-family:var(--fd);margin-bottom:12px">"We are building the internal team that makes every placement possible. If you're good at what you do and want to see the results, this is where to be."</p>
+          <div style="font-size:12px;color:rgba(255,255,255,.35)">— Hearthstone &amp; Co. Leadership</div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+</div></div><!-- /careers -->
+
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<div class="page" id="page-contact">
+<div class="page-content">
+  <div class="page-hero"><div class="container ph-content">
+    <div class="ph-eye">Contact Us</div>
+    <div class="ph-h1">Let's start the conversation.</div>
+    <div class="ph-sub">Submit a staffing request, apply to our clinician network, or schedule a discovery call. We respond within two business hours.</div>
+  </div></div>
+
+  <section class="section"><div class="container contact-layout">
+    <div>
+      <div class="form-tabs">
+        <button class="form-tab active" id="tabFac" onclick="switchFormTab('facility')">I'm a Healthcare Facility</button>
+        <button class="form-tab" id="tabCli" onclick="switchFormTab('clinician')">I'm a Clinician</button>
+      </div>
+      <form id="contactForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" placeholder="First name" required></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" placeholder="Last name" required></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="your@email.com" required></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(xxx) xxx-xxxx"></div>
+        <div class="form-group" id="facField"><label class="form-label">Facility Name</label><input class="form-input" type="text" placeholder="Organization or facility name"></div>
+        <div class="form-group" id="roleField" style="display:none"><label class="form-label">Your Role / License Type</label>
+          <select class="form-select">
+            <option value="">Select your role...</option>
+            <optgroup label="Nursing"><option>CNA</option><option>CMA</option><option>LVN / LPN</option><option>RN</option><option>Travel RN</option><option>ICU / Critical Care RN</option><option>ER RN</option><option>OR / Surgical RN</option><option>NICU / L&D RN</option></optgroup>
+            <optgroup label="Allied Health"><option>Medical Assistant (MA)</option><option>Patient Care Technician (PCT)</option><option>Phlebotomist</option><option>Respiratory Therapist (RT)</option><option>Radiology Technician</option><option>Sterile Processing Technician</option></optgroup>
+            <optgroup label="Support"><option>EVS / Environmental Services</option><option>Unit Secretary</option><option>Other</option></optgroup>
+          </select>
+        </div>
+        <div class="form-group" id="svcField"><label class="form-label">Type of Staffing Needed</label>
+          <select class="form-select"><option value="">Select...</option><option>Per Diem / Short Notice</option><option>Contract (multi-week)</option><option>Travel Nurse Placement</option><option>Temp-to-Hire</option><option>General Inquiry</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="msgField" placeholder="Describe your staffing needs or background..."></textarea></div>
+        <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Send Message <span class="arr">→</span></button>
+      </form>
+      <div class="success-box" id="contactSuccess"><div class="success-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><h3 class="sm">Message Received</h3><p class="md" style="max-width:360px">We'll respond within two business hours. For urgent needs, call (512) 630-0794.</p></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.13 13a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="cd-lbl">Phone</div><div class="cd-val">(512) 630-0794</div><div class="cd-sub">Mon–Fri 8am–6pm, Sat 9am–2pm CT</div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Facilities</div><div class="cd-val">info@hearthstoneandco.com</div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Clinicians &amp; Careers</div><div class="cd-val">careers@hearthstoneandco.com</div></div></div>
+      <div style="background:var(--sage-wash);border-radius:8px;padding:20px 24px;border:1px solid var(--sage-pale)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--sage);margin-bottom:8px">Hours</div><div style="font-size:13.5px;color:var(--ink-soft);line-height:1.8">Monday–Friday: 8:00 AM – 6:00 PM<br>Saturday: 9:00 AM – 2:00 PM<br>Sunday: Closed<br><span style="color:var(--stone-light);font-size:12px">After-hours on-call for active facility clients.</span></div></div>
+    </div>
+  </div></section>
+
+  <section class="section" style="background:var(--sage-wash)"><div class="container" style="max-width:760px">
+    <div class="eyebrow">FAQ</div>
+    <h2 class="lg" style="margin-bottom:48px">Common questions.</h2>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What types of healthcare professionals does Hearthstone & Co. staff?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">We staff CNAs, CMAs, LVNs, RNs, Travel Nurses (all specialties including ICU, ER, OR, NICU, L&D), Medical Assistants, Patient Care Technicians, Phlebotomists, Respiratory Therapists, Radiology Technicians, Sterile Processing Technicians, EVS staff, and Unit Secretaries. All professionals are pre-credentialed before placement.</div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How quickly can Hearthstone & Co. fill a staffing request?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">For per diem and short-notice requests, we target a 48-hour fill window for facilities within our active service area. Facilities with established agreements receive priority placement from our active bench.</div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Are professionals verified before placement?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Yes. Every professional undergoes pre-placement credentialing including active license verification, 7-year background screening, 10-panel drug testing, immunization and TB review, CPR/BLS confirmation, HIPAA training, and OIG/SAM exclusion screening. No placement occurs until the credential file is complete.</div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What areas does Hearthstone & Co. serve?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">We serve the Greater Houston metropolitan area including Houston, Katy, Sugar Land, Pearland, The Woodlands, Baytown, Pasadena, League City, Conroe, Galveston, Clear Lake, Spring, Humble, Missouri City, Stafford, Richmond, Friendswood, Webster, La Marque, and Tomball.</div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How does a facility get started?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Contact us to schedule a 20-minute discovery call. Once a Client Service Agreement is signed, we can begin accepting staffing requests within 24–48 hours. No volume commitments required.</div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">I'm a clinician or looking for a corporate role. How do I apply?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Clinicians: contact us via careers@hearthstoneandco.com or call (512) 630-0794. For corporate roles (Recruiter, SDR, Payroll, Credentialing, Account Manager), visit our Careers page and submit an application — we follow up within three business days.</div></div></div>
+    </div>
+  </div></section>
+
+</div></div><!-- /contact -->
+
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <svg width="28" height="28" viewBox="0 0 100 100"><rect x="8" y="8" width="28" height="84" fill="#6F8F82"/><rect x="64" y="8" width="28" height="84" fill="#6F8F82"/><rect x="8" y="42" width="84" height="16" fill="#6F8F82"/><polygon points="64,8 92,8 92,36 64,8" fill="#1E1E1E"/><polygon points="74,8 92,8 92,28" fill="rgba(191,166,201,.6)"/><polygon points="64,8 72,8 92,30 92,36 64,8" fill="#1E1E1E"/></svg>
+        <div><div class="footer-brand-name">HEARTHSTONE <span>&amp; CO.</span></div><div class="footer-brand-sub">Workforce Solutions</div></div>
+      </div>
+      <p class="footer-desc">Per diem, contract, travel, and temp-to-hire healthcare staffing for Greater Houston facilities. Credentialed professionals. Reliable placements.</p>
+      <div style="font-size:12px;color:rgba(255,255,255,.35);font-style:italic;margin-top:12px">A Division of The Shiylohe Collective</div>
+    </div>
+    <div>
+      <div class="footer-col-t">Navigate</div>
+      <span class="footer-lnk" onclick="showPage('home')">Home</span>
+      <span class="footer-lnk" onclick="showPage('services')">Services</span>
+      <span class="footer-lnk" onclick="showPage('about')">About Us</span>
+      <span class="footer-lnk" onclick="showPage('facilities')">For Facilities</span>
+      <span class="footer-lnk" onclick="showPage('clinicians')">For Clinicians</span>
+      <span class="footer-lnk" onclick="showPage('careers')">Careers</span>
+      <span class="footer-lnk" onclick="showPage('contact')">Contact</span>
+    </div>
+    <div>
+      <div class="footer-col-t">Services</div>
+      <span class="footer-lnk" onclick="showPage('services')">Per Diem Staffing</span>
+      <span class="footer-lnk" onclick="showPage('services')">Contract Staffing</span>
+      <span class="footer-lnk" onclick="showPage('services')">Travel Nurse Placement</span>
+      <span class="footer-lnk" onclick="showPage('services')">Temp-to-Hire</span>
+      <span class="footer-lnk" onclick="showPage('services')">CNA / LVN / RN Staffing</span>
+      <span class="footer-lnk" onclick="showPage('careers')">Corporate Careers</span>
+    </div>
+    <div>
+      <div class="footer-col-t">Contact</div>
+      <div class="footer-ci"><span class="footer-ci-ico">📞</span><div class="footer-ci-txt"><strong>(512) 630-0794</strong>Mon–Fri 8am–6pm CT</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong>info@hearthstoneandco.com</strong>Facilities &amp; inquiries</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong>careers@hearthstoneandco.com</strong>Clinicians &amp; corporate</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">📍</span><div class="footer-ci-txt"><strong>Houston, Texas</strong>Greater Houston Metro</div></div>
+    </div>
+  </div>
+  <div style="width:100%;height:1px;background:rgba(255,255,255,.08);margin-bottom:24px"></div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Hearthstone &amp; Co. Workforce Solutions. All rights reserved.</div>
+    <div class="footer-blinks"><span class="footer-blnk">Privacy Policy</span><span class="footer-blnk">Terms of Service</span></div>
+  </div>
+</div>
+</footer>
+
+
+<script>
+// ── Page Navigation ──────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  var target = document.getElementById('page-' + name);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(function(l) {
+    l.classList.toggle('active', l.dataset.page === name);
+  });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+// ── Nav Scroll ───────────────────────────
+window.addEventListener('scroll', function() {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ── Mobile Menu ──────────────────────────
+var mobOpen = false;
+document.getElementById('mobBtn').addEventListener('click', function() {
+  mobOpen = !mobOpen;
+  document.getElementById('mobNav').classList.toggle('open', mobOpen);
+  var spans = this.querySelectorAll('span');
+  if (mobOpen) {
+    spans[0].style.cssText = 'transform:rotate(45deg) translate(4px,5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.cssText = 'transform:rotate(-45deg) translate(4px,-5px)';
+  } else {
+    spans.forEach(function(s) { s.style.cssText = ''; });
+  }
+});
+function closeMob() {
+  mobOpen = false;
+  document.getElementById('mobNav').classList.remove('open');
+  document.getElementById('mobBtn').querySelectorAll('span').forEach(function(s) { s.style.cssText = ''; });
+}
+
+// ── Service Tabs ─────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.svc-tab').forEach(function(t) { t.classList.remove('active'); });
+  var pane = document.getElementById(id);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── Contact Form Tabs ────────────────────
+function switchFormTab(type) {
+  document.getElementById('tabFac').classList.toggle('active', type === 'facility');
+  document.getElementById('tabCli').classList.toggle('active', type === 'clinician');
+  document.getElementById('facField').style.display = type === 'facility' ? 'flex' : 'none';
+  document.getElementById('roleField').style.display = type === 'clinician' ? 'flex' : 'none';
+  document.getElementById('svcField').style.display = type === 'facility' ? 'flex' : 'none';
+  document.getElementById('msgField').placeholder = type === 'facility'
+    ? 'Describe your staffing needs — role, shift type, timeline, requirements...'
+    : 'Tell us about your background, license type, and availability...';
+}
+
+// ── Contact Form Submit ──────────────────
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('contactSuccess').classList.add('show');
+}
+
+// ── Careers Form Submit ──────────────────
+function handleCareersSubmit(e) {
+  e.preventDefault();
+  document.getElementById('careersForm').style.display = 'none';
+  document.getElementById('careersSuccess').classList.add('show');
+}
+
+// ── Role Accordion (Careers) ─────────────
+var openRole = null;
+var openChev = null;
+function toggleRole(bodyId, chevId) {
+  var body = document.getElementById(bodyId);
+  var chev = document.getElementById(chevId);
+  if (!body) return;
+  var isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  // close all
+  if (openRole && openRole !== body) {
+    openRole.style.maxHeight = '0px';
+    if (openChev) openChev.style.transform = 'rotate(0deg)';
+  }
+  if (isOpen) {
+    body.style.maxHeight = '0px';
+    if (chev) chev.style.transform = 'rotate(0deg)';
+    openRole = null; openChev = null;
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    if (chev) chev.style.transform = 'rotate(180deg)';
+    openRole = body; openChev = chev;
+  }
+}
+
+// ── FAQ Accordion ────────────────────────
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var ans = item.querySelector('.faq-ans');
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) {
+    i.classList.remove('open');
+    i.querySelector('.faq-ans').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    ans.style.maxHeight = ans.scrollHeight + 'px';
+  }
+}
+</script>
+</body>
+</html>
