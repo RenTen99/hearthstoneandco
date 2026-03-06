@@ -618,6 +618,56 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
     </div>
   </section>
 
+  <!-- SUBMIT A REVIEW -->
+  <section class="section" style="background:var(--ivory-warm)">
+    <div class="container" style="max-width:640px">
+      <div class="eyebrow">Share Your Experience</div>
+      <h2 class="lg" style="margin-bottom:8px">Worked with Hearthstone & Co.?</h2>
+      <p class="md" style="margin-bottom:32px">Whether you're a facility partner or a healthcare professional, we'd love to hear about your experience.</p>
+      <form id="reviewForm" name="reviews" method="POST" data-netlify="true" onsubmit="handleReviewSubmit(event)">
+        <input type="hidden" name="form-name" value="reviews">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" name="reviewer-name" type="text" placeholder="Full name" required></div>
+          <div class="form-group"><label class="form-label">Your Role</label>
+            <select class="form-select" name="reviewer-role" required>
+              <option value="">Select...</option>
+              <option>Director of Nursing</option>
+              <option>Staffing Coordinator</option>
+              <option>HR Manager</option>
+              <option>Facility Administrator</option>
+              <option>Registered Nurse (RN)</option>
+              <option>LVN / LPN</option>
+              <option>CNA / CMA</option>
+              <option>Travel Nurse</option>
+              <option>Medical Assistant</option>
+              <option>Allied Health Professional</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Facility or Location</label><input class="form-input" name="reviewer-location" type="text" placeholder="e.g., Memorial Hermann, Katy TX"></div>
+        <div class="form-group"><label class="form-label">Rating</label>
+          <div id="starRating" style="display:flex;gap:6px;cursor:pointer;margin-bottom:4px">
+            <span class="star" onclick="setRating(1)" style="font-size:28px;color:var(--rule);transition:color .15s">★</span>
+            <span class="star" onclick="setRating(2)" style="font-size:28px;color:var(--rule);transition:color .15s">★</span>
+            <span class="star" onclick="setRating(3)" style="font-size:28px;color:var(--rule);transition:color .15s">★</span>
+            <span class="star" onclick="setRating(4)" style="font-size:28px;color:var(--rule);transition:color .15s">★</span>
+            <span class="star" onclick="setRating(5)" style="font-size:28px;color:var(--rule);transition:color .15s">★</span>
+          </div>
+          <input type="hidden" name="rating" id="ratingValue" value="">
+        </div>
+        <div class="form-group"><label class="form-label">Your Review</label><textarea class="form-textarea" name="review-text" style="height:120px" placeholder="What was your experience working with Hearthstone & Co.?" required></textarea></div>
+        <div class="form-group"><label class="form-label">Email <span style="color:var(--stone-light);font-weight:400">(optional — only for verification, never published)</span></label><input class="form-input" name="reviewer-email" type="email" placeholder="your@email.com"></div>
+        <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Submit Review <span class="arr">→</span></button>
+      </form>
+      <div id="reviewSuccess" class="success-box" style="margin-top:16px">
+        <div class="success-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3 class="sm">Review Submitted</h3>
+        <p class="md" style="max-width:380px;margin:0 auto">Thank you for sharing your experience. Your review may be featured on our site after approval.</p>
+      </div>
+    </div>
+  </section>
+
   <section style="background:var(--sage-wash);padding:64px 0">
     <div class="container" style="text-align:center">
       <h2 class="md" style="margin-bottom:12px">Ready to get started?</h2>
@@ -826,7 +876,7 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
 
   <section style="background:var(--sage-deep);padding:80px 0"><div class="container" style="text-align:center">
     <h2 class="lg" style="color:var(--white);margin-bottom:16px">Submit your first staffing request.</h2>
-    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Call (512) 630-0794, email info@hearthstoneandco.com, or fill out our contact form.</p>
+    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Call <a href="tel:5126300794" style="color:inherit;text-decoration:underline">(512) 630-0794</a>, email <a href="mailto:info@hearthstoneandco.com" style="color:inherit;text-decoration:underline">info@hearthstoneandco.com</a>, or fill out our contact form.</p>
     <button class="btn btn-w" onclick="showPage('contact')">Contact Us Now <span class="arr">→</span></button>
   </div></section>
 
@@ -892,7 +942,7 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
 
   <section style="background:var(--mauve-deep);padding:80px 0"><div class="container" style="text-align:center">
     <h2 class="lg" style="color:var(--white);margin-bottom:16px">Ready to find your next placement?</h2>
-    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Apply online or call (512) 630-0794.</p>
+    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Apply online or call <a href="tel:5126300794" style="color:inherit;text-decoration:underline">(512) 630-0794</a>.</p>
     <button class="btn btn-w" onclick="showPage('contact')">Apply Now <span class="arr">→</span></button>
   </div></section>
 
@@ -1133,15 +1183,16 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
         <div class="eyebrow">Apply Now</div>
         <h2 class="lg" style="margin-bottom:8px">Submit your application.</h2>
         <p class="md" style="margin-bottom:32px">Tell us which role you're applying for and we'll follow up within three business days.</p>
-        <form id="careersForm" onsubmit="handleCareersSubmit(event)">
+        <form id="careersForm" name="careers" method="POST" data-netlify="true" onsubmit="handleCareersSubmit(event)">
+          <input type="hidden" name="form-name" value="careers">
           <div class="form-row">
-            <div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" placeholder="First name" required></div>
-            <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" placeholder="Last name" required></div>
+            <div class="form-group"><label class="form-label">First Name</label><input class="form-input" name="first-name" type="text" placeholder="First name" required></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" name="last-name" type="text" placeholder="Last name" required></div>
           </div>
-          <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="your@email.com" required></div>
-          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(xxx) xxx-xxxx"></div>
+          <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" name="email" type="email" placeholder="your@email.com" required></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" name="phone" type="tel" placeholder="(xxx) xxx-xxxx"></div>
           <div class="form-group"><label class="form-label">Position Applying For</label>
-            <select class="form-select" required>
+            <select class="form-select" name="position" required>
               <option value="">Select a role...</option>
               <option>Healthcare Recruiter</option>
               <option>Sales Development Representative (SDR)</option>
@@ -1152,13 +1203,13 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
             </select>
           </div>
           <div class="form-group"><label class="form-label">Years of Relevant Experience</label>
-            <select class="form-select">
+            <select class="form-select" name="experience">
               <option value="">Select...</option>
               <option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>5–10 years</option><option>10+ years</option>
             </select>
           </div>
-          <div class="form-group"><label class="form-label">LinkedIn Profile URL</label><input class="form-input" type="url" placeholder="https://linkedin.com/in/yourprofile"></div>
-          <div class="form-group"><label class="form-label">Cover Note</label><textarea class="form-textarea" style="height:140px" placeholder="Tell us why this role is the right fit. Be direct — this is not the place for a form letter."></textarea></div>
+          <div class="form-group"><label class="form-label">LinkedIn Profile URL</label><input class="form-input" name="linkedin" type="url" placeholder="https://linkedin.com/in/yourprofile"></div>
+          <div class="form-group"><label class="form-label">Cover Note</label><textarea class="form-textarea" name="cover-note" style="height:140px" placeholder="Tell us why this role is the right fit. Be direct — this is not the place for a form letter."></textarea></div>
           <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Submit Application <span class="arr">→</span></button>
         </form>
         <div id="careersSuccess" class="success-box" style="margin-top:16px">
@@ -1172,8 +1223,8 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
           <div style="font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px">Direct Contact</div>
           <div style="font-family:var(--fd);font-size:20px;font-weight:500;color:var(--white);margin-bottom:8px;line-height:1.3">Questions before applying?</div>
           <p style="font-size:13.5px;color:rgba(255,255,255,.5);margin-bottom:20px;line-height:1.65">Reach out directly. We respond to career inquiries within one business day.</p>
-          <div style="font-size:13.5px;color:rgba(255,255,255,.7);margin-bottom:8px">📧 careers@hearthstoneandco.com</div>
-          <div style="font-size:13.5px;color:rgba(255,255,255,.7)">(512) 630-0794</div>
+          <div style="font-size:13.5px;color:rgba(255,255,255,.7);margin-bottom:8px"><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">📧 careers@hearthstoneandco.com</a></div>
+          <div style="font-size:13.5px;color:rgba(255,255,255,.7)"><a href="tel:5126300794" style="color:inherit;text-decoration:none">(512) 630-0794</a></div>
         </div>
         <div style="background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:28px">
           <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--stone-light);margin-bottom:16px">Open Roles</div>
@@ -1211,16 +1262,18 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
         <button class="form-tab active" id="tabFac" onclick="switchFormTab('facility')">I'm a Healthcare Facility</button>
         <button class="form-tab" id="tabCli" onclick="switchFormTab('clinician')">I'm a Clinician</button>
       </div>
-      <form id="contactForm" onsubmit="handleSubmit(event)">
+      <form id="contactForm" name="contact" method="POST" data-netlify="true" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="form-name" value="contact">
+        <input type="hidden" name="contact-type" id="contactTypeField" value="facility">
         <div class="form-row">
-          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" placeholder="First name" required></div>
-          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" placeholder="Last name" required></div>
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" name="first-name" type="text" placeholder="First name" required></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" name="last-name" type="text" placeholder="Last name" required></div>
         </div>
-        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="your@email.com" required></div>
-        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="(xxx) xxx-xxxx"></div>
-        <div class="form-group" id="facField"><label class="form-label">Facility Name</label><input class="form-input" type="text" placeholder="Organization or facility name"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" name="email" type="email" placeholder="your@email.com" required></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" name="phone" type="tel" placeholder="(xxx) xxx-xxxx"></div>
+        <div class="form-group" id="facField"><label class="form-label">Facility Name</label><input class="form-input" name="facility-name" type="text" placeholder="Organization or facility name"></div>
         <div class="form-group" id="roleField" style="display:none"><label class="form-label">Your Role / License Type</label>
-          <select class="form-select">
+          <select class="form-select" name="role-license">
             <option value="">Select your role...</option>
             <optgroup label="Nursing"><option>CNA</option><option>CMA</option><option>LVN / LPN</option><option>RN</option><option>Travel RN</option><option>ICU / Critical Care RN</option><option>ER RN</option><option>OR / Surgical RN</option><option>NICU / L&D RN</option></optgroup>
             <optgroup label="Allied Health"><option>Medical Assistant (MA)</option><option>Patient Care Technician (PCT)</option><option>Phlebotomist</option><option>Respiratory Therapist (RT)</option><option>Radiology Technician</option><option>Sterile Processing Technician</option></optgroup>
@@ -1228,17 +1281,17 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
           </select>
         </div>
         <div class="form-group" id="svcField"><label class="form-label">Type of Staffing Needed</label>
-          <select class="form-select"><option value="">Select...</option><option>Per Diem / Short Notice</option><option>Contract (multi-week)</option><option>Travel Nurse Placement</option><option>Temp-to-Hire</option><option>General Inquiry</option></select>
+          <select class="form-select" name="staffing-type"><option value="">Select...</option><option>Per Diem / Short Notice</option><option>Contract (multi-week)</option><option>Travel Nurse Placement</option><option>Temp-to-Hire</option><option>General Inquiry</option></select>
         </div>
-        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="msgField" placeholder="Describe your staffing needs or background..."></textarea></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" name="message" id="msgField" placeholder="Describe your staffing needs or background..."></textarea></div>
         <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Send Message <span class="arr">→</span></button>
       </form>
-      <div class="success-box" id="contactSuccess"><div class="success-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><h3 class="sm">Message Received</h3><p class="md" style="max-width:360px">We'll respond within two business hours. For urgent needs, call (512) 630-0794.</p></div>
+      <div class="success-box" id="contactSuccess"><div class="success-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><h3 class="sm">Message Received</h3><p class="md" style="max-width:360px">We'll respond within two business hours. For urgent needs, call <a href="tel:5126300794" style="color:var(--sage);text-decoration:underline">(512) 630-0794</a>.</p></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:24px">
-      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.13 13a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="cd-lbl">Phone</div><div class="cd-val">(512) 630-0794</div><div class="cd-sub">Mon–Fri 8am–6pm, Sat 9am–2pm CT</div></div></div>
-      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Facilities</div><div class="cd-val">info@hearthstoneandco.com</div></div></div>
-      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Clinicians &amp; Careers</div><div class="cd-val">careers@hearthstoneandco.com</div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.13 13a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="cd-lbl">Phone</div><div class="cd-val"><a href="tel:5126300794" style="color:inherit;text-decoration:none">(512) 630-0794</a></div><div class="cd-sub">Mon–Fri 8am–6pm, Sat 9am–2pm CT</div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Facilities</div><div class="cd-val"><a href="mailto:info@hearthstoneandco.com" style="color:inherit;text-decoration:none">info@hearthstoneandco.com</a></div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Clinicians &amp; Careers</div><div class="cd-val"><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">careers@hearthstoneandco.com</a></div></div></div>
       <div style="background:var(--sage-wash);border-radius:8px;padding:20px 24px;border:1px solid var(--sage-pale)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--sage);margin-bottom:8px">Hours</div><div style="font-size:13.5px;color:var(--ink-soft);line-height:1.8">Monday–Friday: 8:00 AM – 6:00 PM<br>Saturday: 9:00 AM – 2:00 PM<br>Sunday: Closed<br><span style="color:var(--stone-light);font-size:12px">After-hours on-call for active facility clients.</span></div></div>
     </div>
   </div></section>
@@ -1252,7 +1305,7 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Are professionals verified before placement?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Yes. Every professional undergoes pre-placement credentialing including active license verification, 7-year background screening, 10-panel drug testing, immunization and TB review, CPR/BLS confirmation, HIPAA training, and OIG/SAM exclusion screening. No placement occurs until the credential file is complete.</div></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What areas does Hearthstone & Co. serve?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">We serve the Greater Houston metropolitan area including Houston, Katy, Sugar Land, Pearland, The Woodlands, Baytown, Pasadena, League City, Conroe, Galveston, Clear Lake, Spring, Humble, Missouri City, Stafford, Richmond, Friendswood, Webster, La Marque, and Tomball.</div></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How does a facility get started?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Contact us to schedule a 20-minute discovery call. Once a Client Service Agreement is signed, we can begin accepting staffing requests within 24–48 hours. No volume commitments required.</div></div></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">I'm a clinician or looking for a corporate role. How do I apply?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Clinicians: contact us via careers@hearthstoneandco.com or call (512) 630-0794. For corporate roles (Recruiter, SDR, Payroll, Credentialing, Account Manager), visit our Careers page and submit an application — we follow up within three business days.</div></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">I'm a clinician or looking for a corporate role. How do I apply?<span class="faq-chevron"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-ans"><div class="faq-ans-inner">Clinicians: contact us via <a href="mailto:careers@hearthstoneandco.com" style="color:var(--sage);text-decoration:underline">careers@hearthstoneandco.com</a> or call <a href="tel:5126300794" style="color:var(--sage);text-decoration:underline">(512) 630-0794</a>. For corporate roles (Recruiter, SDR, Payroll, Credentialing, Account Manager), visit our Careers page and submit an application — we follow up within three business days.</div></div></div>
     </div>
   </div></section>
 
@@ -1292,9 +1345,9 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
     </div>
     <div>
       <div class="footer-col-t">Contact</div>
-      <div class="footer-ci"><span class="footer-ci-ico">📞</span><div class="footer-ci-txt"><strong>(512) 630-0794</strong>Mon–Fri 8am–6pm CT</div></div>
-      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong>info@hearthstoneandco.com</strong>Facilities &amp; inquiries</div></div>
-      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong>careers@hearthstoneandco.com</strong>Clinicians &amp; corporate</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">📞</span><div class="footer-ci-txt"><strong><a href="tel:5126300794" style="color:inherit;text-decoration:none">(512) 630-0794</a></strong>Mon–Fri 8am–6pm CT</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:info@hearthstoneandco.com" style="color:inherit;text-decoration:none">info@hearthstoneandco.com</a></strong>Facilities &amp; inquiries</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">careers@hearthstoneandco.com</a></strong>Clinicians &amp; corporate</div></div>
       <div class="footer-ci"><span class="footer-ci-ico">📍</span><div class="footer-ci-txt"><strong>Houston, Texas</strong>Greater Houston Metro</div></div>
     </div>
   </div>
@@ -1360,6 +1413,7 @@ function switchFormTab(type) {
   document.getElementById('facField').style.display = type === 'facility' ? 'flex' : 'none';
   document.getElementById('roleField').style.display = type === 'clinician' ? 'flex' : 'none';
   document.getElementById('svcField').style.display = type === 'facility' ? 'flex' : 'none';
+  document.getElementById('contactTypeField').value = type;
   document.getElementById('msgField').placeholder = type === 'facility'
     ? 'Describe your staffing needs — role, shift type, timeline, requirements...'
     : 'Tell us about your background, license type, and availability...';
@@ -1368,15 +1422,37 @@ function switchFormTab(type) {
 // ── Contact Form Submit ──────────────────
 function handleSubmit(e) {
   e.preventDefault();
-  document.getElementById('contactForm').style.display = 'none';
-  document.getElementById('contactSuccess').classList.add('show');
+  var form = e.target;
+  var formData = new FormData(form);
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
+  }).then(function() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').classList.add('show');
+  }).catch(function(err) {
+    alert('Something went wrong. Please try again or call (512) 630-0794.');
+    console.error(err);
+  });
 }
 
 // ── Careers Form Submit ──────────────────
 function handleCareersSubmit(e) {
   e.preventDefault();
-  document.getElementById('careersForm').style.display = 'none';
-  document.getElementById('careersSuccess').classList.add('show');
+  var form = e.target;
+  var formData = new FormData(form);
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
+  }).then(function() {
+    document.getElementById('careersForm').style.display = 'none';
+    document.getElementById('careersSuccess').classList.add('show');
+  }).catch(function(err) {
+    alert('Something went wrong. Please try again or call (512) 630-0794.');
+    console.error(err);
+  });
 }
 
 // ── Role Accordion (Careers) ─────────────
@@ -1416,6 +1492,36 @@ function toggleFaq(btn) {
     item.classList.add('open');
     ans.style.maxHeight = ans.scrollHeight + 'px';
   }
+}
+
+// ── Star Rating ─────────────────────────
+var currentRating = 0;
+function setRating(n) {
+  currentRating = n;
+  document.getElementById('ratingValue').value = n;
+  var stars = document.querySelectorAll('#starRating .star');
+  stars.forEach(function(s, i) {
+    s.style.color = i < n ? '#D4A855' : 'var(--rule)';
+  });
+}
+
+// ── Review Form Submit ──────────────────
+function handleReviewSubmit(e) {
+  e.preventDefault();
+  if (!currentRating) { alert('Please select a star rating.'); return; }
+  var form = e.target;
+  var formData = new FormData(form);
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
+  }).then(function() {
+    document.getElementById('reviewForm').style.display = 'none';
+    document.getElementById('reviewSuccess').classList.add('show');
+  }).catch(function(err) {
+    alert('Something went wrong. Please try again.');
+    console.error(err);
+  });
 }
 </script>
 </body>
