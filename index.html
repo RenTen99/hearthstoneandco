@@ -876,7 +876,7 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
 
   <section style="background:var(--sage-deep);padding:80px 0"><div class="container" style="text-align:center">
     <h2 class="lg" style="color:var(--white);margin-bottom:16px">Submit your first staffing request.</h2>
-    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Call <a href="tel:5126300794" style="color:inherit;text-decoration:underline">(512) 630-0794</a>, email <a href="mailto:info@hearthstoneandco.com" style="color:inherit;text-decoration:underline">info@hearthstoneandco.com</a>, or fill out our contact form.</p>
+    <p style="font-size:16px;color:rgba(255,255,255,.6);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Call <a href="tel:5126300794" style="color:inherit;text-decoration:underline">(512) 630-0794</a>, email <a href="mailto:facilities@hearthstoneandco.com" style="color:inherit;text-decoration:underline">facilities@hearthstoneandco.com</a>, or fill out our contact form.</p>
     <button class="btn btn-w" onclick="showPage('contact')">Contact Us Now <span class="arr">→</span></button>
   </div></section>
 
@@ -1262,36 +1262,52 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
         <button class="form-tab active" id="tabFac" onclick="switchFormTab('facility')">I'm a Healthcare Facility</button>
         <button class="form-tab" id="tabCli" onclick="switchFormTab('clinician')">I'm a Clinician</button>
       </div>
-      <form id="contactForm" name="contact" method="POST" data-netlify="true" onsubmit="handleSubmit(event)">
-        <input type="hidden" name="form-name" value="contact">
-        <input type="hidden" name="contact-type" id="contactTypeField" value="facility">
+      <!-- FACILITY FORM -->
+      <form id="facilityForm" name="facility-contact" method="POST" data-netlify="true" onsubmit="handleFacilitySubmit(event)">
+        <input type="hidden" name="form-name" value="facility-contact">
         <div class="form-row">
           <div class="form-group"><label class="form-label">First Name</label><input class="form-input" name="first-name" type="text" placeholder="First name" required></div>
           <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" name="last-name" type="text" placeholder="Last name" required></div>
         </div>
         <div class="form-group"><label class="form-label">Email</label><input class="form-input" name="email" type="email" placeholder="your@email.com" required></div>
         <div class="form-group"><label class="form-label">Phone</label><input class="form-input" name="phone" type="tel" placeholder="(xxx) xxx-xxxx"></div>
-        <div class="form-group" id="facField"><label class="form-label">Facility Name</label><input class="form-input" name="facility-name" type="text" placeholder="Organization or facility name"></div>
-        <div class="form-group" id="roleField" style="display:none"><label class="form-label">Your Role / License Type</label>
-          <select class="form-select" name="role-license">
+        <div class="form-group"><label class="form-label">Facility Name</label><input class="form-input" name="facility-name" type="text" placeholder="Organization or facility name"></div>
+        <div class="form-group"><label class="form-label">Type of Staffing Needed</label>
+          <select class="form-select" name="staffing-type"><option value="">Select...</option><option>Per Diem / Short Notice</option><option>Contract (multi-week)</option><option>Travel Nurse Placement</option><option>Temp-to-Hire</option><option>General Inquiry</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" name="message" placeholder="Describe your staffing needs — role, shift type, timeline, requirements..."></textarea></div>
+        <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Send Message <span class="arr">→</span></button>
+      </form>
+      <!-- CLINICIAN FORM -->
+      <form id="clinicianForm" name="clinician-contact" method="POST" data-netlify="true" onsubmit="handleClinicianSubmit(event)" style="display:none">
+        <input type="hidden" name="form-name" value="clinician-contact">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" name="first-name" type="text" placeholder="First name" required></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" name="last-name" type="text" placeholder="Last name" required></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" name="email" type="email" placeholder="your@email.com" required></div>
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" name="phone" type="tel" placeholder="(xxx) xxx-xxxx"></div>
+        <div class="form-group"><label class="form-label">Your Role / License Type</label>
+          <select class="form-select" name="role-license" required>
             <option value="">Select your role...</option>
             <optgroup label="Nursing"><option>CNA</option><option>CMA</option><option>LVN / LPN</option><option>RN</option><option>Travel RN</option><option>ICU / Critical Care RN</option><option>ER RN</option><option>OR / Surgical RN</option><option>NICU / L&D RN</option></optgroup>
             <optgroup label="Allied Health"><option>Medical Assistant (MA)</option><option>Patient Care Technician (PCT)</option><option>Phlebotomist</option><option>Respiratory Therapist (RT)</option><option>Radiology Technician</option><option>Sterile Processing Technician</option></optgroup>
             <optgroup label="Support"><option>EVS / Environmental Services</option><option>Unit Secretary</option><option>Other</option></optgroup>
           </select>
         </div>
-        <div class="form-group" id="svcField"><label class="form-label">Type of Staffing Needed</label>
-          <select class="form-select" name="staffing-type"><option value="">Select...</option><option>Per Diem / Short Notice</option><option>Contract (multi-week)</option><option>Travel Nurse Placement</option><option>Temp-to-Hire</option><option>General Inquiry</option></select>
+        <div class="form-group"><label class="form-label">Preferred Engagement</label>
+          <select class="form-select" name="engagement-type"><option value="">Select...</option><option>Per Diem</option><option>Contract</option><option>Travel Nurse (13-week)</option><option>Temp-to-Hire</option><option>Open to All</option></select>
         </div>
-        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" name="message" id="msgField" placeholder="Describe your staffing needs or background..."></textarea></div>
-        <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Send Message <span class="arr">→</span></button>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" name="message" placeholder="Tell us about your background, license type, and availability..."></textarea></div>
+        <button type="submit" class="btn btn-p" style="width:100%;justify-content:center">Submit Application <span class="arr">→</span></button>
       </form>
       <div class="success-box" id="contactSuccess"><div class="success-ico"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><h3 class="sm">Message Received</h3><p class="md" style="max-width:360px">We'll respond within two business hours. For urgent needs, call <a href="tel:5126300794" style="color:var(--sage);text-decoration:underline">(512) 630-0794</a>.</p></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:24px">
       <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 015.13 13a19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="cd-lbl">Phone</div><div class="cd-val"><a href="tel:5126300794" style="color:inherit;text-decoration:none">(512) 630-0794</a></div><div class="cd-sub">Mon–Fri 8am–6pm, Sat 9am–2pm CT</div></div></div>
-      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Facilities</div><div class="cd-val"><a href="mailto:info@hearthstoneandco.com" style="color:inherit;text-decoration:none">info@hearthstoneandco.com</a></div></div></div>
-      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Clinicians &amp; Careers</div><div class="cd-val"><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">careers@hearthstoneandco.com</a></div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Facilities</div><div class="cd-val"><a href="mailto:facilities@hearthstoneandco.com" style="color:inherit;text-decoration:none">facilities@hearthstoneandco.com</a></div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Clinicians</div><div class="cd-val"><a href="mailto:clinicians@hearthstoneandco.com" style="color:inherit;text-decoration:none">clinicians@hearthstoneandco.com</a></div></div></div>
+      <div class="cd-item"><div class="cd-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div><div class="cd-lbl">Careers</div><div class="cd-val"><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">careers@hearthstoneandco.com</a></div></div></div>
       <div style="background:var(--sage-wash);border-radius:8px;padding:20px 24px;border:1px solid var(--sage-pale)"><div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--sage);margin-bottom:8px">Hours</div><div style="font-size:13.5px;color:var(--ink-soft);line-height:1.8">Monday–Friday: 8:00 AM – 6:00 PM<br>Saturday: 9:00 AM – 2:00 PM<br>Sunday: Closed<br><span style="color:var(--stone-light);font-size:12px">After-hours on-call for active facility clients.</span></div></div>
     </div>
   </div></section>
@@ -1346,8 +1362,9 @@ p.sm{font-size:13.5px;line-height:1.65;color:var(--stone-light)}
     <div>
       <div class="footer-col-t">Contact</div>
       <div class="footer-ci"><span class="footer-ci-ico">📞</span><div class="footer-ci-txt"><strong><a href="tel:5126300794" style="color:inherit;text-decoration:none">(512) 630-0794</a></strong>Mon–Fri 8am–6pm CT</div></div>
-      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:info@hearthstoneandco.com" style="color:inherit;text-decoration:none">info@hearthstoneandco.com</a></strong>Facilities &amp; inquiries</div></div>
-      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">careers@hearthstoneandco.com</a></strong>Clinicians &amp; corporate</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:facilities@hearthstoneandco.com" style="color:inherit;text-decoration:none">facilities@hearthstoneandco.com</a></strong>Facilities &amp; inquiries</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:clinicians@hearthstoneandco.com" style="color:inherit;text-decoration:none">clinicians@hearthstoneandco.com</a></strong>Healthcare professionals</div></div>
+      <div class="footer-ci"><span class="footer-ci-ico">✉️</span><div class="footer-ci-txt"><strong><a href="mailto:careers@hearthstoneandco.com" style="color:inherit;text-decoration:none">careers@hearthstoneandco.com</a></strong>Corporate careers</div></div>
       <div class="footer-ci"><span class="footer-ci-ico">📍</span><div class="footer-ci-txt"><strong>Houston, Texas</strong>Greater Houston Metro</div></div>
     </div>
   </div>
@@ -1410,17 +1427,13 @@ function switchTab(id, btn) {
 function switchFormTab(type) {
   document.getElementById('tabFac').classList.toggle('active', type === 'facility');
   document.getElementById('tabCli').classList.toggle('active', type === 'clinician');
-  document.getElementById('facField').style.display = type === 'facility' ? 'flex' : 'none';
-  document.getElementById('roleField').style.display = type === 'clinician' ? 'flex' : 'none';
-  document.getElementById('svcField').style.display = type === 'facility' ? 'flex' : 'none';
-  document.getElementById('contactTypeField').value = type;
-  document.getElementById('msgField').placeholder = type === 'facility'
-    ? 'Describe your staffing needs — role, shift type, timeline, requirements...'
-    : 'Tell us about your background, license type, and availability...';
+  document.getElementById('facilityForm').style.display = type === 'facility' ? 'block' : 'none';
+  document.getElementById('clinicianForm').style.display = type === 'clinician' ? 'block' : 'none';
+  document.getElementById('contactSuccess').classList.remove('show');
 }
 
-// ── Contact Form Submit ──────────────────
-function handleSubmit(e) {
+// ── Facility Form Submit ────────────────
+function handleFacilitySubmit(e) {
   e.preventDefault();
   var form = e.target;
   var formData = new FormData(form);
@@ -1429,7 +1442,25 @@ function handleSubmit(e) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams(formData).toString()
   }).then(function() {
-    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('facilityForm').style.display = 'none';
+    document.getElementById('contactSuccess').classList.add('show');
+  }).catch(function(err) {
+    alert('Something went wrong. Please try again or call (512) 630-0794.');
+    console.error(err);
+  });
+}
+
+// ── Clinician Form Submit ───────────────
+function handleClinicianSubmit(e) {
+  e.preventDefault();
+  var form = e.target;
+  var formData = new FormData(form);
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString()
+  }).then(function() {
+    document.getElementById('clinicianForm').style.display = 'none';
     document.getElementById('contactSuccess').classList.add('show');
   }).catch(function(err) {
     alert('Something went wrong. Please try again or call (512) 630-0794.');
