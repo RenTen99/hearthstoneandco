@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Our Clinician Network | Hearthstone &amp; Co. Workforce Solutions</title>
+  <meta name="description" content="Healthcare professionals: join the Hearthstone & Co. clinician network for flexible assignments, weekly pay, and dedicated recruiter support across Greater Houston.">
+  <meta name="keywords" content="Houston healthcare staffing agency, nurse staffing Houston, CNA staffing Houston, per diem nurses Houston, travel nurse staffing Houston, medical staffing agency Houston">
+  <meta property="og:title" content="Join Our Clinician Network | Hearthstone &amp; Co.">
+  <meta property="og:description" content="Healthcare professionals: join the Hearthstone & Co. clinician network for flexible assignments, weekly pay, and dedicated recruiter support across Greater Houston.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="">
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo">
+      <span class="nav-logo-primary">Hearthstone &amp; Co.</span>
+      <span class="nav-logo-sub">Workforce Solutions</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li class="nav-dropdown">
+        <a href="/healthcare-staffing.html">Services <span class="chevron">&#8964;</span></a>
+        <div class="dropdown-menu">
+          <a href="/healthcare-staffing.html">&#9632; Healthcare Staffing</a>
+          <a href="/for-healthcare-facilities.html">&#9632; For Facilities</a>
+          <a href="/compliance-credentialing.html">&#9632; Compliance &amp; Credentialing</a>
+          <a href="/industries-served.html">&#9632; Industries Served</a>
+        </div>
+      </li>
+      <li class="nav-dropdown">
+        <a href="/clinician-jobs.html">Clinicians <span class="chevron">&#8964;</span></a>
+        <div class="dropdown-menu">
+          <a href="/clinician-jobs.html">&#9632; Clinician Jobs</a>
+          <a href="/join-our-network.html">&#9632; Join Our Network</a>
+        </div>
+      </li>
+      <li><a href="/why-hearthstone.html">Why Hearthstone</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/join-our-network.html" class="btn btn-ghost-nav">Join Network</a>
+      <a href="/request-staffing.html" class="btn btn-primary btn-sm">Request Staffing</a>
+    </div>
+    <button class="nav-mobile-btn" id="mobileBtn" aria-label="Toggle menu" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb"><a href="/index.html">Home</a><span class="bc-sep">/</span><span>Join Our Network</span></nav>
+    <h1>Join Our Clinician Network</h1>
+    <p>Submit your information and a dedicated recruiter will be in touch with opportunities that match your experience, schedule, and goals.</p>
+    
+  </div>
+</section>
+<section class="form-page">
+  <div class="container">
+    <div class="form-layout">
+      <div>
+        <div class="form-card">
+          <h2 class="form-ttl">Quick Apply</h2>
+          <p class="form-sub">Our team reviews applications promptly. A recruiter will contact qualified candidates within 2 business days.</p>
+          <form id="clinicianForm" name="clinician-network" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data">
+            <input type="hidden" name="form-name" value="clinician-network">
+            <p hidden><label>Don't fill this out <input name="bot-field"></label></p>
+            <div class="fsect">Personal Information</div>
+            <div class="frow"><div class="fg"><label>Full Name <span class="req">*</span></label><input type="text" name="full_name" required placeholder="Jane Smith, RN"></div><div class="fg"><label>Email <span class="req">*</span></label><input type="email" name="email" required placeholder="jane@email.com"></div></div>
+            <div class="frow"><div class="fg"><label>Phone <span class="req">*</span></label><input type="tel" name="phone" required placeholder="(713) 555-0100"></div><div class="fg"><label>City <span class="req">*</span></label><input type="text" name="city" required placeholder="Houston"></div></div>
+            <div class="fsect">Clinical Background</div>
+            <div class="frow">
+              <div class="fg"><label>License / Credential Type <span class="req">*</span></label><select name="license_type" required><option value="">Select</option><option>Registered Nurse (RN)</option><option>Licensed Vocational Nurse (LVN)</option><option>Certified Nursing Assistant (CNA)</option><option>Medical Assistant (MA)</option><option>Physical Therapist (PT)</option><option>Occupational Therapist (OT)</option><option>Respiratory Therapist (RT)</option><option>Allied Health — Other</option></select></div>
+              <div class="fg"><label>Years of Experience <span class="req">*</span></label><select name="experience" required><option value="">Select</option><option>Less than 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5–10 years</option><option>10+ years</option></select></div>
+            </div>
+            <div class="frow">
+              <div class="fg"><label>Preferred Assignment Type</label><select name="assignment_type"><option value="">Select</option><option>Per Diem</option><option>Contract (13 weeks)</option><option>Travel</option><option>Temp-to-Hire</option><option>Open to All</option></select></div>
+              <div class="fg"><label>Preferred Shift</label><select name="shift"><option value="">Select</option><option>Days</option><option>Nights</option><option>Weekends</option><option>Flexible</option></select></div>
+            </div>
+            <div class="fg"><label>Resume / CV <span style="font-size:.72rem;color:var(--text-3)">(PDF preferred — optional at this stage)</span></label><input type="file" name="resume" accept=".pdf,.doc,.docx" style="padding:.5rem"></div>
+            <div class="fg"><label>Anything else we should know?</label><textarea name="notes" rows="3" placeholder="Specialty certifications, availability windows, location preferences..."></textarea></div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:.5rem">Submit My Application</button>
+            <p style="text-align:center;font-size:.75rem;color:var(--text-3);margin-top:.85rem">Our team reviews applications quickly. A recruiter will contact qualified candidates within 2 business days.</p>
+          </form>
+          <div class="success-msg" id="clinicianSuccess"><div class="success-ico">&#10003;</div><h3>Application Received</h3><p>Thank you for your interest. A recruiter will review your profile and reach out with matching opportunities.</p><a href="/clinician-jobs.html" class="btn btn-primary" style="margin-top:1.5rem">View Open Roles</a></div>
+        </div>
+      </div>
+      <div class="form-sidebar">
+        <div class="sidebar-card">
+          <h4>Why Clinicians Choose Hearthstone</h4>
+          <div class="trust-pt"><span class="trust-ico">&#128197;</span><p><strong style="color:#fff">Flexible Scheduling</strong><br>Work the shifts and assignments that fit your life — per diem, contract, or travel.</p></div>
+          <div class="trust-pt"><span class="trust-ico">&#128176;</span><p><strong style="color:#fff">Weekly Pay</strong><br>Competitive compensation with weekly direct deposit. No delays, no surprises.</p></div>
+          <div class="trust-pt"><span class="trust-ico">&#128205;</span><p><strong style="color:#fff">Local &amp; Travel Options</strong><br>Assignments throughout Greater Houston, with travel opportunities available.</p></div>
+          <div class="trust-pt"><span class="trust-ico">&#128101;</span><p><strong style="color:#fff">Dedicated Recruiter</strong><br>A recruiter who knows your background and advocates for your preferences.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo">
+            <span class="footer-logo-main">Hearthstone &amp; Co.</span>
+            <span class="footer-logo-sub">Workforce Solutions</span>
+          </div>
+          <p>Credentialed healthcare professionals. Reliable placements. Scalable workforce support for Greater Houston healthcare facilities.</p>
+          <p class="footer-parent">A subsidiary of The Shiylohe Collective &mdash; Veteran-Owned</p>
+          <div class="footer-contact-info">
+            <a href="mailto:hello@hearthstoneandco.com">hello@hearthstoneandco.com</a>
+            <a href="tel:+17135550100">(713) 555-0100</a>
+            <span>Greater Houston, TX</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Services</h5>
+          <ul>
+            <li><a href="/healthcare-staffing.html">Healthcare Staffing</a></li>
+            <li><a href="/for-healthcare-facilities.html">For Facilities</a></li>
+            <li><a href="/request-staffing.html">Request Staffing</a></li>
+            <li><a href="/compliance-credentialing.html">Compliance</a></li>
+            <li><a href="/industries-served.html">Industries Served</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Clinicians</h5>
+          <ul>
+            <li><a href="/clinician-jobs.html">Clinician Jobs</a></li>
+            <li><a href="/join-our-network.html">Join Our Network</a></li>
+            <li><a href="/why-hearthstone.html">Why Hearthstone</a></li>
+          </ul>
+          <h5 style="margin-top:1.5rem">Company</h5>
+          <ul>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+            <li><a href="/resources.html">Resources</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-cta-col">
+          <div class="footer-cta-card">
+            <h4>Need Staffing Now?</h4>
+            <p>Submit a request and receive qualified, credentialed clinicians within 48 hours.</p>
+            <a href="/request-staffing.html" class="btn btn-gold" style="width:100%;justify-content:center;margin-top:.75rem">Request Staffing</a>
+          </div>
+          <div class="footer-cta-card footer-cta-card--light" style="margin-top:1rem">
+            <h4>Healthcare Professionals</h4>
+            <p>Flexible assignments, weekly pay, dedicated recruiter support.</p>
+            <a href="/join-our-network.html" class="btn btn-outline" style="width:100%;justify-content:center;margin-top:.75rem;font-size:.82rem">Join Our Network</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <span>&copy; 2025 Hearthstone &amp; Co. Workforce Solutions. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="/js/main.js"></script>
+</body>
+</html>
