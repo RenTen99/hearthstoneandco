@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications Dashboard - Hearthstone & Co.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: #f8f9fa; color: #1A1208; }
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .header {
+            background: #0F3D2A;
+            color: #F9F6F0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 28px; }
+        .header p { font-size: 13px; opacity: 0.9; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #C9A84C;
+        }
+
+        .stat-value { font-size: 32px; font-weight: 700; color: #0F3D2A; }
+        .stat-label { font-size: 12px; color: #999; margin-top: 4px; text-transform: uppercase; }
+
+        /* Controls */
+        .controls {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .controls input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background: #0F3D2A;
+            color: #F9F6F0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn:hover { background: #1a5a3d; }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #0F3D2A;
+        }
+
+        .btn-secondary:hover { background: #e0e0e0; }
+
+        /* Table */
+        .table-wrapper {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0F3D2A;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+
+        tr:hover { background: #f8f9fa; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge.new { background: #cfe2ff; color: #084298; }
+        .badge.reviewed { background: #fff3cd; color: #664d03; }
+        .badge.interview { background: #d1ecf1; color: #0c5460; }
+        .badge.offer { background: #d4edda; color: #155724; }
+        .badge.rejected { background: #f8d7da; color: #721c24; }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .action-view { background: #0F3D2A; color: #F9F6F0; }
+        .action-update { background: #C9A84C; color: #F9F6F0; }
+        .action-contact { background: #28a745; color: white; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 16px;
+        }
+
+        .modal-header h2 { font-size: 24px; color: #0F3D2A; margin: 0; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+
+        .modal-field {
+            margin-bottom: 16px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #0F3D2A;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .modal-value {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .modal-notes textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .modal-status select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state p { font-size: 16px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            table { font-size: 12px; }
+            th, td { padding: 10px; }
+            .actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Applications Dashboard</h1>
+                <p>Manage job applications from the careers page</p>
+            </div>
+            <button class="btn" onclick="downloadApplications()">📥 Download CSV</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalApps">0</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="newApps">0</div>
+                <div class="stat-label">New Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="ccApps">0</div>
+                <div class="stat-label">Credentialing Coordinator</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="sdrApps">0</div>
+                <div class="stat-label">Sales Dev Rep</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="hrApps">0</div>
+                <div class="stat-label">Healthcare Recruiter</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterTable()">
+            <select id="positionFilter" onchange="filterTable()">
+                <option value="">All Positions</option>
+                <option value="Credentialing Coordinator">Credentialing Coordinator</option>
+                <option value="Sales Development Representative">Sales Development Representative</option>
+                <option value="Healthcare Recruiter">Healthcare Recruiter</option>
+            </select>
+            <select id="statusFilter" onchange="filterTable()">
+                <option value="">All Statuses</option>
+                <option value="New Application">New Application</option>
+                <option value="Reviewed">Reviewed</option>
+                <option value="Interview Scheduled">Interview Scheduled</option>
+                <option value="Offer Extended">Offer Extended</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <button class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table id="applicationsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Position</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: #999;">
+                            No applications yet. They'll appear here when candidates apply.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Application Detail Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalApplicantName"></h2>
+                <button class="modal-close" onclick="closeModal('detailModal')">×</button>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">Position Applied For</div>
+                <div class="modal-value" id="modalPosition"></div>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">Email</div>
+                <div class="modal-value" id="modalEmail"></div>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">Phone</div>
+                <div class="modal-value" id="modalPhone"></div>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">Years of Experience</div>
+                <div class="modal-value" id="modalExperience"></div>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">Cover Letter</div>
+                <div class="modal-value" id="modalCoverLetter" style="white-space: pre-wrap; line-height: 1.6;"></div>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">LinkedIn Profile</div>
+                <div class="modal-value" id="modalLinkedIn"></div>
+            </div>
+
+            <div class="modal-field">
+                <div class="modal-label">Submitted</div>
+                <div class="modal-value" id="modalSubmitted"></div>
+            </div>
+
+            <div class="modal-field modal-status">
+                <div class="modal-label">Update Status</div>
+                <select id="statusUpdate" onchange="updateApplicationStatus()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                    <option value="New Application">New Application</option>
+                    <option value="Reviewed">Reviewed</option>
+                    <option value="Interview Scheduled">Interview Scheduled</option>
+                    <option value="Offer Extended">Offer Extended</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+
+            <div class="modal-field modal-notes">
+                <div class="modal-label">Internal Notes</div>
+                <textarea id="internalNotes" placeholder="Add notes about this applicant..." style="min-height: 100px;"></textarea>
+            </div>
+
+            <button class="btn" onclick="saveApplicationNotes()" style="width: 100%;">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        let allApplications = [];
+        let currentApplication = null;
+
+        // Load applications on page load
+        window.addEventListener('load', () => {
+            loadApplications();
+            updateStats();
+            setInterval(loadApplications, 5000); // Auto-refresh every 5 seconds
+        });
+
+        function loadApplications() {
+            const stored = localStorage.getItem('hearthstoneApplications');
+            const applications = stored ? JSON.parse(stored) : [];
+
+            // Add default status and notes if not present
+            allApplications = applications.map(app => ({
+                ...app,
+                status: app.status || 'New Application',
+                notes: app.notes || ''
+            }));
+
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+
+            if (allApplications.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: #999;">No applications yet. They'll appear here when candidates apply.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = allApplications.map((app, index) => {
+                const statusClass = getStatusClass(app.status);
+                return `
+                    <tr>
+                        <td><strong>${app.fullName}</strong></td>
+                        <td>${app.email}</td>
+                        <td>${app.phone}</td>
+                        <td>${app.position}</td>
+                        <td>${app.experience} years</td>
+                        <td><span class="badge ${statusClass}">${app.status}</span></td>
+                        <td style="font-size: 12px; color: #999;">${new Date(app.submittedAt).toLocaleDateString()}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn action-view" onclick="viewApplication(${index})">View</button>
+                                <button class="action-btn action-contact" onclick="contactApplicant('${app.email}')">Email</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'New Application': 'new',
+                'Reviewed': 'reviewed',
+                'Interview Scheduled': 'interview',
+                'Offer Extended': 'offer',
+                'Rejected': 'rejected'
+            };
+            return classes[status] || 'new';
+        }
+
+        function viewApplication(index) {
+            currentApplication = allApplications[index];
+            document.getElementById('modalApplicantName').textContent = currentApplication.fullName;
+            document.getElementById('modalPosition').textContent = currentApplication.position;
+            document.getElementById('modalEmail').textContent = currentApplication.email;
+            document.getElementById('modalPhone').textContent = currentApplication.phone;
+            document.getElementById('modalExperience').textContent = currentApplication.experience + ' years';
+            document.getElementById('modalCoverLetter').textContent = currentApplication.coverLetter;
+            document.getElementById('modalLinkedIn').innerHTML = currentApplication.linkedin 
+                ? `<a href="${currentApplication.linkedin}" target="_blank">${currentApplication.linkedin}</a>` 
+                : '(Not provided)';
+            document.getElementById('modalSubmitted').textContent = new Date(currentApplication.submittedAt).toLocaleString();
+            document.getElementById('statusUpdate').value = currentApplication.status;
+            document.getElementById('internalNotes').value = currentApplication.notes;
+
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function updateApplicationStatus() {
+            const newStatus = document.getElementById('statusUpdate').value;
+            if (currentApplication) {
+                const index = allApplications.indexOf(currentApplication);
+                allApplications[index].status = newStatus;
+            }
+        }
+
+        function saveApplicationNotes() {
+            if (currentApplication) {
+                const index = allApplications.indexOf(currentApplication);
+                allApplications[index].status = document.getElementById('statusUpdate').value;
+                allApplications[index].notes = document.getElementById('internalNotes').value;
+                
+                localStorage.setItem('hearthstoneApplications', JSON.stringify(allApplications));
+                
+                renderTable();
+                updateStats();
+                closeModal('detailModal');
+                
+                alert('✓ Application updated successfully');
+            }
+        }
+
+        function contactApplicant(email) {
+            window.location.href = `mailto:${email}`;
+        }
+
+        function filterTable() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const positionValue = document.getElementById('positionFilter').value;
+            const statusValue = document.getElementById('statusFilter').value;
+
+            const filtered = allApplications.filter(app => {
+                const matchSearch = app.fullName.toLowerCase().includes(searchValue) || 
+                                   app.email.toLowerCase().includes(searchValue);
+                const matchPosition = !positionValue || app.position === positionValue;
+                const matchStatus = !statusValue || app.status === statusValue;
+                
+                return matchSearch && matchPosition && matchStatus;
+            });
+
+            const tbody = document.getElementById('tableBody');
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: #999;">No applications match your filters.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((app, index) => {
+                const statusClass = getStatusClass(app.status);
+                const actualIndex = allApplications.indexOf(app);
+                return `
+                    <tr>
+                        <td><strong>${app.fullName}</strong></td>
+                        <td>${app.email}</td>
+                        <td>${app.phone}</td>
+                        <td>${app.position}</td>
+                        <td>${app.experience} years</td>
+                        <td><span class="badge ${statusClass}">${app.status}</span></td>
+                        <td style="font-size: 12px; color: #999;">${new Date(app.submittedAt).toLocaleDateString()}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn action-view" onclick="viewApplication(${actualIndex})">View</button>
+                                <button class="action-btn action-contact" onclick="contactApplicant('${app.email}')">Email</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('positionFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            renderTable();
+        }
+
+        function updateStats() {
+            const total = allApplications.length;
+            const newCount = allApplications.filter(a => a.status === 'New Application').length;
+            const ccCount = allApplications.filter(a => a.position === 'Credentialing Coordinator').length;
+            const sdrCount = allApplications.filter(a => a.position === 'Sales Development Representative').length;
+            const hrCount = allApplications.filter(a => a.position === 'Healthcare Recruiter').length;
+
+            document.getElementById('totalApps').textContent = total;
+            document.getElementById('newApps').textContent = newCount;
+            document.getElementById('ccApps').textContent = ccCount;
+            document.getElementById('sdrApps').textContent = sdrCount;
+            document.getElementById('hrApps').textContent = hrCount;
+        }
+
+        function downloadApplications() {
+            if (allApplications.length === 0) {
+                alert('No applications to download');
+                return;
+            }
+
+            let csv = 'Name,Email,Phone,Position,Experience (years),Status,LinkedIn,Submitted,Cover Letter\n';
+            
+            allApplications.forEach(app => {
+                const row = [
+                    `"${app.fullName}"`,
+                    `"${app.email}"`,
+                    `"${app.phone}"`,
+                    `"${app.position}"`,
+                    app.experience,
+                    `"${app.status}"`,
+                    `"${app.linkedin || ''}"`,
+                    `"${app.submittedAt}"`,
+                    `"${app.coverLetter.replace(/"/g, '""')}"`
+                ].join(',');
+                csv += row + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `hearthstone_applications_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') closeModal('detailModal');
+        });
+    </script>
+</body>
+</html>
