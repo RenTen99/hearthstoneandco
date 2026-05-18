@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /hearthstone-applications-dashboard
 
 Sitemap: https://www.hearthstoneandco.com/sitemap.xml
